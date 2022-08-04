@@ -1,5 +1,5 @@
 from qtpy import QtCore, QtGui, QtWidgets
-from pyp4qt.AppInterop import interop
+from pyp4qt.apps import interop
 from pyp4qt import PerforceUtils
 
 def displayErrorUI(e):

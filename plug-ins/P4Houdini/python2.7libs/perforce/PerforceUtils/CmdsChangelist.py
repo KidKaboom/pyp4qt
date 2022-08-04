@@ -3,7 +3,7 @@ import re
 from P4 import P4, P4Exception
 from pyp4qt.utils import p4Logger
 from pyp4qt.PerforceUtils import SetupConnection
-from pyp4qt.GUI.ErrorMessageWindow import displayErrorUI
+from pyp4qt.qt.ErrorMessageWindow import displayErrorUI
 
 def queryChangelists( p4, status = None):
     if not status:

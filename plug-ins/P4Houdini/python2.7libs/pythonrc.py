@@ -12,7 +12,7 @@ except Exception as e:
     sys.stderr.write( "Failed to load Perforce for Houdini: %s\n" % e)
 
 # import hou
-# from perforce.GUI.qtpy import QtWidgets, QtCore, QtWidgets
+# from perforce.qt.qtpy import QtWidgets, QtCore, QtWidgets
 
 # class IntegratedEventLoop(object):
 #   """This class behaves like QEventLoop except it allows PyQt to run inside

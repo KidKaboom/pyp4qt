@@ -5,7 +5,7 @@ from qtpy import QtCore, QtGui, QtWidgets
 
 from pyp4qt import utils
 from pyp4qt.PerforceUtils import CmdsChangelist
-from pyp4qt.AppInterop import interop
+from pyp4qt.apps import interop
 from ErrorMessageWindow import displayErrorUI
 import DepotClientViewModel
 

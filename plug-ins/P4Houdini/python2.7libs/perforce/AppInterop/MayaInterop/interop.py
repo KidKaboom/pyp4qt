@@ -21,8 +21,8 @@ import maya.OpenMaya as api
 
 import pyp4qt.globals
 from pyp4qt.version import __version__
-from pyp4qt.AppInterop.BaseInterop import BaseInterop, BaseCallbacks
-from pyp4qt.GUI.qtpy import QtCore, QtGui, QtWidgets
+from pyp4qt.apps.base_adapter import BaseAdapter, BaseCallbacks
+from pyp4qt.qt.qtpy import QtCore, QtGui, QtWidgets
 
 class MayaCallbacks(BaseCallbacks):
     contactrootenv = "CONTACTROOT"
@@ -100,7 +100,7 @@ class MayaCallbacks(BaseCallbacks):
 
 
 
-class MayaInterop(BaseInterop):
+class MayaAdapter(BaseAdapter):
     @staticmethod
     def setupEnvironment():
         import maya.standalone
@@ -161,7 +161,7 @@ class MayaInterop(BaseInterop):
 
     def initializeMenu(self, entries):
         try:
-            # gMainWindow = MayaInterop.main_parent_window()
+            # gMainWindow = maya.main_parent_window()
             gMainWindow = maya.mel.eval('$temp1=$gMainWindow')
         except RuntimeError as e:
             print e

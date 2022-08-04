@@ -3,7 +3,7 @@ from P4 import P4, P4Exception
 from qtpy import QtCore, QtGui, QtWidgets
 
 import pyp4qt.utils as Utils
-from pyp4qt.AppInterop import interop
+from pyp4qt.apps import interop
 
 class SubmitProgressUI(QtWidgets.QDialog):
 

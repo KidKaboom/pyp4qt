@@ -44,23 +44,23 @@ else:
     interop = None
 
 
-# interop = __import__('perforce.interop.MayaInterop', fromlist=['MayaInterop'])
-# print getattr(interop, 'MayaInterop')
+# interop = __import__('perforce.interop.maya', fromlist=['maya'])
+# print getattr(interop, 'maya')
 
 
 # # Import app specific utilities, maya opens scenes differently than nuke etc
 # # Are we in maya or nuke?
 # if re.match("maya", os.path.basename(sys.executable), re.I):
 #     Utils.p4Logger().info("Configuring for Maya")
-#     interop = Utils.importClass('perforce.interop.MayaInterop', 'MayaInterop')
+#     interop = Utils.importClass('perforce.interop.maya', 'maya')
 
 # elif re.match("nuke", os.path.basename(sys.executable), re.I):
 #     Utils.p4Logger().info("Configuring for Nuke")
-#     interop = Utils.importClass('perforce.interop.NukeInterop', 'NukeInterop')
+#     interop = Utils.importClass('perforce.interop.nuke', 'nuke')
 
 # elif in_unittest:
 #     Utils.p4Logger().info("Configuring for testing")
-#     interop = Utils.importClass('perforce.interop.TestInterop', 'TestInterop')
+#     interop = Utils.importClass('perforce.interop.standalone', 'standalone')
 
 # else:
 #     Utils.p4Logger().warning("Couldn't find app configuration")

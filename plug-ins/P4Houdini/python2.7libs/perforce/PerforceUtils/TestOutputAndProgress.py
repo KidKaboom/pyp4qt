@@ -1,7 +1,7 @@
 from P4 import P4, P4Exception, Progress, OutputHandler
 
 import pyp4qt.utils as Utils
-from pyp4qt.AppInterop import interop
+from pyp4qt.apps import interop
 
 class TestOutputAndProgress(Progress, OutputHandler):
 

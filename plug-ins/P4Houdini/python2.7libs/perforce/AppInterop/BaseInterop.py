@@ -27,7 +27,7 @@ class BaseInterop(object):
 
     @staticmethod
     def createMenu(entries):
-        from pyp4qt.AppInterop import interop
+        from pyp4qt.apps import interop
 
         # We need to import interop so the appropriate class is used while creating the menus
         interop = interop()
