@@ -22,7 +22,7 @@ def connect(p4):
     except P4Exception as e:
         p4Logger().info('Attempting to login...')
         try:
-            from pyp4qt.GUI import LoginWindow
+            from pyp4qt.ui import LoginWindow
             LoginWindow.setP4Password(p4)
         except P4Exception as e:
             p4Logger().warning('Couldn\'t login to server')

@@ -4,10 +4,10 @@ from P4 import P4, P4Exception
 from PySide2 import QtCore, QtGui, QtWidgets
 
 from pyp4qt import utils
-from pyp4qt.PerforceUtils import CmdsChangelist
+from pyp4qt.perforce_utils import CmdsChangelist
 from pyp4qt.apps import interop
-from pyp4qt.PerforceUtils.TestOutputAndProgress import TestOutputAndProgress
-from pyp4qt.GUI.SubmitProgressWindow import SubmitProgressUI
+from pyp4qt.perforce_utils.TestOutputAndProgress import TestOutputAndProgress
+from pyp4qt.ui.SubmitProgressWindow import SubmitProgressUI
 
 class SubmitChangeUi(QtWidgets.QDialog):
 

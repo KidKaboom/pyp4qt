@@ -8,8 +8,8 @@ import nuke
 import pyp4qt.globals
 from pyp4qt import utils
 from pyp4qt.version import __version__
-from pyp4qt.apps.BaseAdapter import BaseAdapter, BaseCallbacks
-from pyp4qt.GUI.qtpy import QtCore, QtGui, QtWidgets
+from pyp4qt.apps.base_adapter import BaseAdapter, BaseCallbacks
+from pyp4qt.ui.qtpy import QtCore, QtGui, QtWidgets
 
 
 class NukeAdapter(BaseAdapter):
@@ -39,7 +39,7 @@ class NukeAdapter(BaseAdapter):
 
     @staticmethod
     def getIconPath():
-        return os.path.join(NukeAdapter.getSettingsPath(), "P4Nuke", "perforce", "Images")
+        return os.path.join(NukeAdapter.getSettingsPath(), "P4Nuke", "perforce", "icons")
     
     @staticmethod
     def getSceneFiles():

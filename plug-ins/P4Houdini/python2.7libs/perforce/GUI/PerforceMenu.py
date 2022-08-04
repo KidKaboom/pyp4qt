@@ -6,9 +6,9 @@ import re
 from P4 import P4, P4Exception
 
 from pyp4qt import utils
-from pyp4qt.PerforceUtils import SetupConnection
+from pyp4qt.perforce_utils import SetupConnection
 from pyp4qt.apps import interop
-from pyp4qt.PerforceUtils.TestOutputAndProgress import TestOutputAndProgress
+from pyp4qt.perforce_utils.TestOutputAndProgress import TestOutputAndProgress
 from pyp4qt.qt.SubmitProgressWindow import SubmitProgressUI
 
 from LoginWindow import firstTimeLogin

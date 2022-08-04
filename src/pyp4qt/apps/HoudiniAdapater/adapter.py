@@ -8,8 +8,8 @@ import hou
 import pyp4qt.globals
 from pyp4qt import utils
 from pyp4qt.version import __version__
-from pyp4qt.apps.BaseAdapter import BaseAdapter, BaseCallbacks
-from pyp4qt.GUI.qtpy import QtCore, QtGui, QtWidgets
+from pyp4qt.apps.base_adapter import BaseAdapter, BaseCallbacks
+from pyp4qt.ui.qtpy import QtCore, QtGui, QtWidgets
 
 
 class HoudiniAdapter(BaseAdapter):
@@ -36,7 +36,7 @@ class HoudiniAdapter(BaseAdapter):
 
     @staticmethod
     def getIconPath():
-        return os.path.join(HoudiniAdapter.getSettingsPath(), "scripts", "P4Houdini" "perforce", "Images")
+        return os.path.join(HoudiniAdapter.getSettingsPath(), "scripts", "P4Houdini" "perforce", "icons")
     
     @staticmethod
     def getSceneFiles():

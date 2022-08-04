@@ -5,7 +5,7 @@ from P4 import P4, P4Exception
 from PySide2 import QtCore, QtGui, QtWidgets
 
 import pyp4qt.utils as Utils
-from pyp4qt.GUI.ErrorMessageWindow import displayErrorUI
+from pyp4qt.ui.ErrorMessageWindow import displayErrorUI
 
 def firstTimeLogin(p4, enterUsername=True, enterPassword=True, parent=None, *args):
     username = None

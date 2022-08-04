@@ -8,7 +8,7 @@ setupPythonEnvironment()
 
 from pyp4qt.utils import p4Logger
 from pyp4qt.apps import interop
-from pyp4qt.GUI import PerforceMenu
+from pyp4qt.ui import PerforceMenu
 
 
 # This is a convenient way of automatically loading up a specific menu entry for testing

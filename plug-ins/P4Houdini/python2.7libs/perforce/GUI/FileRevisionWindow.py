@@ -4,7 +4,7 @@ from P4 import P4, P4Exception
 from qtpy import QtCore, QtGui, QtWidgets
 
 from pyp4qt import utils
-from pyp4qt.PerforceUtils import CmdsChangelist
+from pyp4qt.perforce_utils import CmdsChangelist
 from pyp4qt.apps import interop
 from ErrorMessageWindow import displayErrorUI
 import DepotClientViewModel

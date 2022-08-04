@@ -91,7 +91,7 @@ def createShotFolders(root, shotName, shotNumInput):
     makeEmptyDirectory(os.path.join(houdini, "scenes"))
 
     maya = makeDirectory(os.path.join(cg, "maya"))
-    makeEmptyDirectory(os.path.join(maya, "Images"))
+    makeEmptyDirectory(os.path.join(maya, "icons"))
     makeEmptyDirectory(os.path.join(maya, "scenes"))
 
     makeEmptyDirectory(os.path.join(shot, "comp"))

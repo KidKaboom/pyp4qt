@@ -23,7 +23,7 @@ import maya.OpenMaya as api
 
 import pyp4qt.globals
 from pyp4qt.version import __version__
-from pyp4qt.apps.BaseAdapter import BaseAdapter, BaseCallbacks
+from pyp4qt.apps.base_adapter import BaseAdapter, BaseCallbacks
 from pyp4qt.apps.MayaAdapter import utils
 from pyp4qt import globals
 from PySide2 import QtCore, QtGui, QtWidgets
@@ -141,7 +141,7 @@ class MayaAdapter(BaseAdapter):
 
     @staticmethod
     def getIconPath():
-        # return os.environ['MAYA_APP_DIR'] + "/scripts/Perforce/Images/"
+        # return os.environ['MAYA_APP_DIR'] + "/scripts/Perforce/icons/"
         return GlobalVars.ICONS_DIR
 
     @staticmethod

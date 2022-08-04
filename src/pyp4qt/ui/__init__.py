@@ -8,7 +8,7 @@ from distutils.version import StrictVersion
 from P4 import P4, P4Exception, Progress, OutputHandler
 
 import pyp4qt.utils as Utils
-import pyp4qt.GUI.PerforceMenu as PerforceMenu
+import pyp4qt.ui.PerforceMenu as PerforceMenu
 from pyp4qt.apps import interop
 
 # try:

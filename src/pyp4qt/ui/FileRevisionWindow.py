@@ -4,10 +4,10 @@ from P4 import P4, P4Exception
 from PySide2 import QtCore, QtGui, QtWidgets
 
 from pyp4qt import utils
-from pyp4qt.PerforceUtils import CmdsChangelist
+from pyp4qt.perforce_utils import CmdsChangelist
 from pyp4qt.apps import interop
-from pyp4qt.GUI.ErrorMessageWindow import displayErrorUI
-from pyp4qt.GUI import DepotClientViewModel
+from pyp4qt.ui.ErrorMessageWindow import displayErrorUI
+from pyp4qt.ui import DepotClientViewModel
 
 class BaseRevisionTab(QtWidgets.QWidget):
     def __init__(self, p4, parent=None):

@@ -2,7 +2,7 @@ import os
 
 from pyp4qt.version import __version__
 from PySide2 import QtCore, QtGui, QtWidgets
-from pyp4qt.apps.BaseAdapter import BaseAdapter
+from pyp4qt.apps.base_adapter import BaseAdapter
 from pyp4qt import utils
 
 
@@ -33,7 +33,7 @@ class StandaloneAdapter(BaseAdapter):
     @staticmethod
     def getIconPath():
         cwd = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-        iconpath = os.path.join(cwd, "../Images/")
+        iconpath = os.path.join(cwd, "../icons/")
         return os.path.realpath(iconpath)
 
     @staticmethod
