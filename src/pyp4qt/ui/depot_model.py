@@ -126,7 +126,6 @@ class DepotModel(QAbstractItemModel):
 
     def setSession(self, session):
         self.clear()
-
         self._session = session
         self._populate()
         return
