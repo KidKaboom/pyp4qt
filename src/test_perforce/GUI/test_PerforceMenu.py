@@ -1,8 +1,8 @@
 import unittest
 import logging
 
-from perforce.AppInterop import interop
-from perforce.GUI import initMenu
+from pyp4qt.AppInterop import interop
+from pyp4qt.GUI import initMenu
 
 from test_perforce import TestingEnvironment
 

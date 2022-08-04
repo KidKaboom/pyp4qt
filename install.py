@@ -17,7 +17,7 @@ class App(object):
             if not text in lines:
                 f.write('\n' + text)
             else:
-                print '%s is initialized already, skipping setup' % path
+                print('%s is initialized already, skipping setup' % path)
 
     def getHome(self):
         if platform.system() == 'Windows':
@@ -214,7 +214,7 @@ class Houdini(App):
 
         # Really dodgy way of checking for the houdini version by counting down until we find valid houdinis
         # Something tells me this won't be used in houdini 31, but who knows
-        for x in xrange(30, 0, -1):
+        for x in range(30, 0, -1):
             versions = [x + (float(y) / 10) for y in range(0, 10)]
             for v in versions:
                 houdiniprefs = os.path.join(homedir, 'Documents', 'houdini%s' % (v))
@@ -228,7 +228,7 @@ class Houdini(App):
     def install(self):
         userprefs = self.getPreferences()
         if not userprefs:
-            print 'Can\'t find a Houdini preferences directory.'
+            print('Can\'t find a Houdini preferences directory.')
             return
 
         hou_plugin_src = os.path.realpath(os.path.join(self.cwd, 'src', 'AppPlugins', 'P4Houdini'))
@@ -266,7 +266,7 @@ def logSymlink(src, dst):
         raise IOError('%s doesn\'t exist' % src)
 
     if os.path.exists(dst):
-        print '%s exists, unlinking...' % dst
+        print('%s exists, unlinking...' % dst)
         try:
             if os.path.exists(dst):
                 if os.path.islink(dst):
@@ -278,10 +278,10 @@ def logSymlink(src, dst):
                         os.remove(dst)
                         # shutil.rmtree(dst)
         except OSError as e:
-            print 'Symlink error: %s' % e
+            print('Symlink error: %s' % e)
             return
 
-    print 'Linking %s to %s...' % (src, dst)
+    print('Linking %s to %s...' % (src, dst))
     os.symlink(src, dst)
 
 
@@ -309,7 +309,7 @@ def setup():
                 else:
                     check_output("mklink %s %s" % (link_name, source), shell=True)
             except CalledProcessError as e:
-                print e
+                print(e)
 
         def is_admin():
             try:
@@ -322,17 +322,17 @@ def setup():
 
         # If this prompt isn't an admin prompt, Windows won't let us symlink :(
         if not is_admin():
-            print "Warning: This prompt isn't elevated (admin), not possible to symlink files. Do a simple copy instead? [Y/N]"
+            print("Warning: This prompt isn't elevated (admin), not possible to symlink files. Do a simple copy instead? [Y/N]")
             sys.stdout.flush()
 
             yes = set(['yes', 'y', 'ye', ''])
             no = set(['no', 'n'])
             choice = raw_input().lower()
             if choice in yes:
-                print 'Copying instead of linking...'
+                print('Copying instead of linking...')
                 os.symlink = shutil.copyfile
             else:
-                print 'Aborting.'
+                print('Aborting.')
                 sys.exit(1)
 
 def install():
@@ -344,15 +344,15 @@ def install():
             ]
     for app in apps:
         msg = '-'*25 + ' Setting up Perforce for %s' % (type(app).__name__) + '-'*25
-        print '-' * len(msg)
-        print msg
-        print '-' * len(msg)
+        print('-' * len(msg))
+        print(msg)
+        print('-' * len(msg))
         app.install()
-        print ''
+        print('')
 
 
 if __name__ == '__main__':
     setup()
     install()
 
-    print 'Done!'
+    print('Done!')

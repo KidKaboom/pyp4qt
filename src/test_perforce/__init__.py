@@ -31,7 +31,7 @@ setupPythonEnvironment()
 
 
 from P4 import P4, P4Exception
-from perforce.PerforceUtils import SetupConnection
+from pyp4qt.PerforceUtils import SetupConnection
 def TestingEnvironment():
     p4 = P4()
     p4.connect()

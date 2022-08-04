@@ -1,11 +1,10 @@
-# P4VFX: A Perforce Toolset for VFX Software
+# PYP4QT: A Perforce Toolset for QT Applications with Python
+
+## Fork
+This is a fork of [P4VFX](https://github.com/TomMinor/P4VFX) updated for Python 3.7.7 and Maya 2022.
 
 ## Description
-P4VFX is a toolset that is intended to make working with Perforce from within VFX content creation applications simple and intuitive for artists. It achieves this by stripping out complex features such as branching and only providing the tools an artist actually needs to checkout assets, submit/manage changelists, view local and remote file history and revert work as necessary.
-
-![Alt text](images/p4vfx_revision_view.png?raw=true "Perforce for Maya Changelist Interface")
-![Alt text](images/nuke_p4vfx_menu.png?raw=true "Perforce for Maya")
-![Alt text](images/maya_p4vfx_menu.png?raw=true "Perforce for Nuke")
+PYP4QT is a toolset that is intended to make working with Perforce from with content creation applications simple and intuitive for artists. It achieves this by stripping out complex features such as branching and only providing the tools an artist actually needs to checkout assets, submit/manage changelists, view local and remote file history and revert work as necessary.
 
 Supported functionality:
 * Depot/Client browser to clearly show what files are to be added, edited or removed (can also view deleted files for restore).
@@ -19,16 +18,12 @@ As this was developed for an actual project, various pipeline functions were add
 * Automatically strip out the student flag from saved Maya scenes (handy!)
 * Asset and shot creation wizards to simplify the process of ensuring everything follows a consistent structure
 
-It uses [QtPy](https://github.com/spyder-ide/qtpy) to allow use in both Qt4/Qt5 applications and the [P4Python API](https://www.perforce.com/downloads/helix#product-54).
-
 ## Install
 
 The installation process is now automated by **install.py**, it will support all out of the box plugins (Maya, Nuke, etc) as they are added. It handles symlinking the module files to the places necessary for each app, and creating/updating P4CONFIG if necessary.
 
 To use it, simply call it like so:
 ```python install.py```
-
-(For convenience, P4Python is bundled within the repo.)
 
 **Note: The Mac P4Python library isn't bundled within the repo yet, but it is just a case of placing it in appropriate PATH so the application can find it.**
 
