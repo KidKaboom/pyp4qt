@@ -8,11 +8,11 @@ import hou
 import pyp4qt.globals
 from pyp4qt import utils
 from pyp4qt.version import __version__
-from pyp4qt.AppInterop.BaseInterop import BaseInterop, BaseCallbacks
+from pyp4qt.apps.BaseAdapter import BaseAdapter, BaseCallbacks
 from pyp4qt.GUI.qtpy import QtCore, QtGui, QtWidgets
 
 
-class HoudiniInterop(BaseInterop):
+class HoudiniAdapter(BaseAdapter):
     @staticmethod
     def setupEnvironment():
         pass
@@ -23,8 +23,8 @@ class HoudiniInterop(BaseInterop):
 
         # app = QtWidgets.QApplication([])
 
-        # TestInterop.window = TestWidget()
-        # return TestInterop.window, app
+        # StandaloneAdapter.window = TestWidget()
+        # return StandaloneAdapter.window, app
 
     @staticmethod
     def main_parent_window():
@@ -36,7 +36,7 @@ class HoudiniInterop(BaseInterop):
 
     @staticmethod
     def getIconPath():
-        return os.path.join(HoudiniInterop.getSettingsPath(), "scripts", "P4Houdini" "perforce", "Images")
+        return os.path.join(HoudiniAdapter.getSettingsPath(), "scripts", "P4Houdini" "perforce", "Images")
     
     @staticmethod
     def getSceneFiles():

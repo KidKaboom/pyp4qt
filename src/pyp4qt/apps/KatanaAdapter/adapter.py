@@ -10,11 +10,11 @@ import UI4
 import pyp4qt.globals
 from pyp4qt import utils
 from pyp4qt.version import __version__
-from pyp4qt.AppInterop.BaseInterop import BaseInterop, BaseCallbacks
+from pyp4qt.apps.BaseAdapter import BaseAdapter, BaseCallbacks
 from pyp4qt.GUI.qtpy import QtCore, QtGui, QtWidgets
 
 
-class KatanaInterop(BaseInterop):
+class KatanaAdapter(BaseAdapter):
     @staticmethod
     def setupEnvironment():
         pass
@@ -45,7 +45,7 @@ class KatanaInterop(BaseInterop):
 
     @staticmethod
     def getIconPath():
-        return os.path.join(KatanaInterop.getSettingsPath(), "P4Katana", "perforce", "Images")
+        return os.path.join(KatanaAdapter.getSettingsPath(), "P4Katana", "perforce", "Images")
     
     @staticmethod
     def getSceneFiles():

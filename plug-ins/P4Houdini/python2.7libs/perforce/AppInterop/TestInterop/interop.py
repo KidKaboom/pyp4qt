@@ -2,7 +2,7 @@ import os
 
 from pyp4qt.version import __version__
 from pyp4qt.qt.qtpy import QtCore, QtGui, QtWidgets
-from pyp4qt.apps.base_adapter import BaseAdapter
+from pyp4qt.apps.BaseAdapter import BaseAdapter
 from pyp4qt import utils
 
 class TestAdapter(BaseAdapter):

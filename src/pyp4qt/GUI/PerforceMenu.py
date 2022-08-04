@@ -7,7 +7,7 @@ from P4 import P4, P4Exception
 
 from pyp4qt import utils
 from pyp4qt.PerforceUtils import SetupConnection
-from pyp4qt.AppInterop import interop
+from pyp4qt.apps import interop
 from pyp4qt.PerforceUtils.TestOutputAndProgress import TestOutputAndProgress
 from pyp4qt.GUI.SubmitProgressWindow import SubmitProgressUI
 

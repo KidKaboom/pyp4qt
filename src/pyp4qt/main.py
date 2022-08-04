@@ -7,7 +7,7 @@ from test_perforce import TestingEnvironment, setupPythonEnvironment
 setupPythonEnvironment()
 
 from pyp4qt.utils import p4Logger
-from pyp4qt.AppInterop import interop
+from pyp4qt.apps import interop
 from pyp4qt.GUI import PerforceMenu
 
 

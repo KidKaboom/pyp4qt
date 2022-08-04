@@ -1,6 +1,7 @@
 import tempfile
 from pyp4qt.version import __version__
 
+
 class BaseCallbacks(object):
 
     @staticmethod
@@ -16,7 +17,7 @@ class BaseCallbacks(object):
         raise NotImplementedError
 
 
-class BaseInterop(object):
+class BaseAdapter(object):
     @staticmethod
     def setupEnvironment():
         pass
@@ -27,7 +28,7 @@ class BaseInterop(object):
 
     @staticmethod
     def createMenu(entries):
-        from pyp4qt.AppInterop import interop
+        from pyp4qt.apps import interop
 
         # We need to import interop so the appropriate class is used while creating the menus
         interop = interop()
@@ -77,13 +78,13 @@ class BaseInterop(object):
             elif entry.get('entries'):
                 self.addMenuSubmenu("", entry.get('label'), entry.get('image'), entry['entries'])
             elif entry.get('command'):
-                self.addMenuCommand("", entry.get('label'), entry.get('image'), entry.get('command') )
+                self.addMenuCommand("", entry.get('label'), entry.get('image'), entry.get('command'))
             else:
                 raise ValueError('Unknown entry type for \'%s\'' % entry)
 
     def addMenuDivider(self, menu, label):
         raise NotImplementedError
-       
+
     def addMenuLabel(self, menu, label):
         raise NotImplementedError
 

@@ -34,7 +34,7 @@ modules = filter(lambda x: not x.endswith('.pyc'), modules)
 modules = [os.path.basename(x) for x in modules]
 
 for module in modules:
-    module_name = "pyp4qt.AppInterop.{}".format(module)
+    module_name = "pyp4qt.apps.{}".format(module)
     mod = loadInteropModule(module_name, cwd)
 
     try:
@@ -47,7 +47,7 @@ for module in modules:
     Utils.p4Logger().info("Configuring for %s" % module)
     mod.setup()
     # submodule = getattr(mod, 'interop')
-    submodule = loadInteropModule("{}.interop".format(module_name), os.path.join(cwd, module))
+    submodule = loadInteropModule("{}.adapter".format(module_name), os.path.join(cwd, module))
     interop = getattr(submodule, module)
     break
 else:

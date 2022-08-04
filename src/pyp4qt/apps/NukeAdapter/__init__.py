@@ -1,9 +1,9 @@
 def validate():
 	try:
-		import Katana
+		import nuke
 	except ImportError as e:
 		return False
 	return True
 
 def setup():
-	import interop
+	import adapter

@@ -3,7 +3,7 @@ import os
 from P4 import P4, P4Exception
 from PySide2 import QtCore, QtGui, QtWidgets
 from pyp4qt import utils
-from pyp4qt.AppInterop import interop
+from pyp4qt.apps import interop
 
 def epochToTimeStr(time):
     import datetime

@@ -6,4 +6,4 @@ def validate():
 	return True
 
 def setup():
-	import interop
+	import adapter

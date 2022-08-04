@@ -9,7 +9,7 @@ from P4 import P4, P4Exception, Progress, OutputHandler
 
 import pyp4qt.utils as Utils
 import pyp4qt.GUI.PerforceMenu as PerforceMenu
-from pyp4qt.AppInterop import interop
+from pyp4qt.apps import interop
 
 # try:
 #     AppUtils.closeWindow(ui.perforceMenu)

@@ -10,7 +10,7 @@ def connect(p4):
         # P4CONFIG file per app. If they have already set an absolute path
         # for P4CONFIG, then this will have no effect.
         # Otherwise P4 will search upwards until it finds a p4config file
-        from pyp4qt.AppInterop import interop
+        from pyp4qt.apps import interop
         p4.cwd = interop.getSettingsPath()
 
         p4Logger().info('Connecting to server... %s' % p4.port)

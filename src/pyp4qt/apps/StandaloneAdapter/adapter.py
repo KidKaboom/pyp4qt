@@ -2,11 +2,11 @@ import os
 
 from pyp4qt.version import __version__
 from PySide2 import QtCore, QtGui, QtWidgets
-from pyp4qt.AppInterop.BaseInterop import BaseInterop
+from pyp4qt.apps.BaseAdapter import BaseAdapter
 from pyp4qt import utils
 
 
-class TestInterop(BaseInterop):
+class StandaloneAdapter(BaseAdapter):
     window = None
 
     @staticmethod
@@ -18,12 +18,12 @@ class TestInterop(BaseInterop):
 
         app = QtWidgets.QApplication([])
 
-        TestInterop.window = TestWidget()
-        return TestInterop.window, app
+        StandaloneAdapter.window = TestWidget()
+        return StandaloneAdapter.window, app
 
     @staticmethod
     def main_parent_window():
-        return TestInterop.window
+        return StandaloneAdapter.window
 
     @staticmethod
     def getSettingsPath():
@@ -64,7 +64,7 @@ class TestInterop(BaseInterop):
         pass
 
     def initializeMenu(self, entries):
-        window = TestInterop.window
+        window = StandaloneAdapter.window
         vbox = QtWidgets.QVBoxLayout()
         window.setLayout(vbox)
 

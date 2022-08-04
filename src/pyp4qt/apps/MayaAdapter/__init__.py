@@ -8,4 +8,4 @@ def validate():
 	return True
 
 def setup():
-	import pyp4qt.AppInterop.MayaInterop.interop
+	import pyp4qt.apps.MayaAdapter.adapter

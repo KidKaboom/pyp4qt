@@ -23,8 +23,8 @@ import maya.OpenMaya as api
 
 import pyp4qt.globals
 from pyp4qt.version import __version__
-from pyp4qt.AppInterop.BaseInterop import BaseInterop, BaseCallbacks
-from pyp4qt.AppInterop.MayaInterop import utils
+from pyp4qt.apps.BaseAdapter import BaseAdapter, BaseCallbacks
+from pyp4qt.apps.MayaAdapter import utils
 from pyp4qt import globals
 from PySide2 import QtCore, QtGui, QtWidgets
 
@@ -111,7 +111,7 @@ class MayaCallbacks(BaseCallbacks):
         api.MScriptUtil.setBool(inputBool, True)
 
 
-class MayaInterop(BaseInterop):
+class MayaAdapter(BaseAdapter):
     @staticmethod
     def setupEnvironment():
         import maya.standalone
@@ -170,7 +170,7 @@ class MayaInterop(BaseInterop):
 
     def initializeMenu(self, entries):
         try:
-            # gMainWindow = MayaInterop.main_parent_window()
+            # gMainWindow = MayaAdapter.main_parent_window()
             gMainWindow = maya.mel.eval('$temp1=$gMainWindow')
         except RuntimeError as e:
             print(e)

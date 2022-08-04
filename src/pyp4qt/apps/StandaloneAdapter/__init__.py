@@ -17,4 +17,4 @@ def validate():
 
 
 def setup():
-    import pyp4qt.AppInterop.TestInterop.interop
+    import pyp4qt.apps.StandaloneAdapter.adapter
