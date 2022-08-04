@@ -2,7 +2,7 @@ import os
 
 from P4 import P4, P4Exception
 from PySide2 import QtCore, QtGui, QtWidgets
-import pyp4qt.utils as Utils
+from pyp4qt import utils
 from pyp4qt.AppInterop import interop
 
 def epochToTimeStr(time):
@@ -71,7 +71,7 @@ class PerforceItemModel(QtCore.QAbstractItemModel):
 
     def populate(self, rootdir):
         self.rootItem = PerforceItem(None)
-        Utils.p4Logger().debug('Populating: %s' % rootdir)
+        utils.p4Logger().debug('Populating: %s' % rootdir)
         self.populateSubDir(idx=None, root=rootdir)
 
     def populateSubDir(self, idx=None, root="//depot"):
@@ -117,12 +117,12 @@ class PerforceItemModel(QtCore.QAbstractItemModel):
                 if isClientPath:
                     f['dir'] = f['dir'].replace('//depot', clientRoot)
 
-                Utils.p4Logger().debug('Dir: \t%s' % f['dir'] )
+                utils.p4Logger().debug('Dir: \t%s' % f['dir'] )
                 treeItem.appendFolderItem(f['dir'])
 
             for f in files:
                 filepath = f['depotFile'] if isDepotPath else f['clientFile']
-                Utils.p4Logger().debug('File: \t%s' % filepath)
+                utils.p4Logger().debug('File: \t%s' % filepath)
 
                 # Check if this is in a pending changelist,
                 # which gives us different fields to query
@@ -150,7 +150,7 @@ class PerforceItemModel(QtCore.QAbstractItemModel):
                 p4fstat = self.p4.run_fstat(*fstat_pending_args)
                 if p4fstat:
                     p4fstat = p4fstat[0]
-                    Utils.p4Logger().debug('fstat(%s): %s' % (fstat_pending_args, p4fstat['clientFile']))
+                    utils.p4Logger().debug('fstat(%s): %s' % (fstat_pending_args, p4fstat['clientFile']))
 
                     workspaceRoot = os.path.normpath(self.p4.run_info()[0]['clientRoot'].replace('\\', '/'))
                     p4path = os.path.normpath(p4path).replace(workspaceRoot, '')
@@ -165,13 +165,13 @@ class PerforceItemModel(QtCore.QAbstractItemModel):
                         currentDir = uncommonDirectories[0]
                         currentFolders = [ os.path.basename(f['dir']) for f in folders ]
 
-                        Utils.p4Logger().debug( commonPrefixSplit )
-                        Utils.p4Logger().debug( uncommonDirectories )
+                        utils.p4Logger().debug( commonPrefixSplit )
+                        utils.p4Logger().debug( uncommonDirectories )
                         if not currentDir in currentFolders:
-                            Utils.p4Logger().debug('Adding pending path folder')
+                            utils.p4Logger().debug('Adding pending path folder')
                             treeItem.appendFolderItem( os.path.join(p4path, currentDir) )
 
-        Utils.p4Logger().debug('\n\n')
+        utils.p4Logger().debug('\n\n')
 
     def p4Filelist(self, path):
         results = []
@@ -287,4 +287,28 @@ class PerforceItemModel(QtCore.QAbstractItemModel):
             parentItem = self.rootItem
         else:
             parentItem = parent.internalPointer()
+
+        if not parentItem:
+            return 0
+
         return len(parentItem.childItems)
+
+
+if __name__ == "__main__":
+    import sys
+
+    session = P4()
+    session.connect()
+
+    if session.connected():
+        app = QtWidgets.QApplication()
+
+        view = QtWidgets.QTreeView()
+        model = PerforceItemModel(session, view)
+        model.populate(utils.clientRoot(session))
+        view.setModel(model)
+        view.show()
+
+        sys.exit(app.exec_())
+
+    session.disconnect()

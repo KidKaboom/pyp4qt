@@ -45,7 +45,7 @@ class KatanaInterop(BaseInterop):
 
     @staticmethod
     def getIconPath():
-        return os.path.join(KatanaInterop.getSettingsPath(), "P4Katana", "perforce", "images")
+        return os.path.join(KatanaInterop.getSettingsPath(), "P4Katana", "perforce", "Images")
     
     @staticmethod
     def getSceneFiles():

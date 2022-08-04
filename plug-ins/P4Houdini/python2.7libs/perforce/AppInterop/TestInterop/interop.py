@@ -32,7 +32,7 @@ class TestAdapter(BaseAdapter):
     @staticmethod
     def getIconPath():
         cwd = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-        iconpath = os.path.join(cwd, "../images/")
+        iconpath = os.path.join(cwd, "../Images/")
         return os.path.realpath(iconpath)
 
     @staticmethod

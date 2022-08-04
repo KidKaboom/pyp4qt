@@ -91,7 +91,7 @@ def createShotFolders(root, shotName, shotNumInput):
     makeEmptyDirectory(os.path.join(houdini, "scenes"))
 
     maya = makeDirectory(os.path.join(cg, "maya"))
-    makeEmptyDirectory(os.path.join(maya, "images"))
+    makeEmptyDirectory(os.path.join(maya, "Images"))
     makeEmptyDirectory(os.path.join(maya, "scenes"))
 
     makeEmptyDirectory(os.path.join(shot, "comp"))
@@ -146,6 +146,37 @@ def queryFileExtension(filePath, extensions=[]):
     return fileExt in extensions
 
 
+def sessionInfo(session):
+    """ Returns a dictionary of information from the current P4 session.
+
+    Args:
+        session (P4)
+
+    Returns:
+        dict()
+    """
+    result = dict()
+
+    if session.connected():
+        info = session.run("info")
+
+        if info:
+            result = info[0]
+
+    return result
+
+def clientRoot(session):
+    """ Returns the current client root directory.
+
+    Args:
+        session (P4)
+
+    Returns:
+        str
+    """
+    return sessionInfo(session).get("clientRoot", str())
+
+
 def isPathInClientRoot(session, path):
     """ Returns True if the path is in the client root.
 
@@ -183,11 +214,6 @@ def inDirectory(file, directory):
 
     # return true, if the common prefix of both is equal to directory
     # e.g. /a/b/c/d.rst and directory is /a/b, the common prefix is /a/b
-    return (os.path.commonprefix([directory, file]) == directory) or (os.path.abspath(file) == os.path.abspath(directory))
+    return (os.path.commonprefix([directory, file]) == directory) or (
+                os.path.abspath(file) == os.path.abspath(directory))
 
-if __name__ == "__main__":
-    session = P4()
-    session.connect()
-    print(isPathInClientRoot(session, "C:/trees/cod/main/animation_source"))
-
-    session.disconnect()

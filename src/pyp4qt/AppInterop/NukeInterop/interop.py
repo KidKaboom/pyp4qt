@@ -39,7 +39,7 @@ class NukeInterop(BaseInterop):
 
     @staticmethod
     def getIconPath():
-        return os.path.join(NukeInterop.getSettingsPath(), "P4Nuke", "perforce", "images")
+        return os.path.join(NukeInterop.getSettingsPath(), "P4Nuke", "perforce", "Images")
     
     @staticmethod
     def getSceneFiles():

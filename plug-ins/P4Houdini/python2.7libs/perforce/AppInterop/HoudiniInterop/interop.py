@@ -36,7 +36,7 @@ class HoudiniAdapter(BaseAdapter):
 
     @staticmethod
     def getIconPath():
-        return os.path.join(HoudiniAdapter.getSettingsPath(), "scripts", "P4Houdini" "perforce", "images")
+        return os.path.join(HoudiniAdapter.getSettingsPath(), "scripts", "P4Houdini" "perforce", "Images")
     
     @staticmethod
     def getSceneFiles():

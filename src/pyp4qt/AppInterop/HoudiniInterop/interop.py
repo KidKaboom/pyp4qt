@@ -36,7 +36,7 @@ class HoudiniInterop(BaseInterop):
 
     @staticmethod
     def getIconPath():
-        return os.path.join(HoudiniInterop.getSettingsPath(), "scripts", "P4Houdini" "perforce", "images")
+        return os.path.join(HoudiniInterop.getSettingsPath(), "scripts", "P4Houdini" "perforce", "Images")
     
     @staticmethod
     def getSceneFiles():

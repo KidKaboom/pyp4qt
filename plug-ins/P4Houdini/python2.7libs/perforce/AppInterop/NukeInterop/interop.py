@@ -39,7 +39,7 @@ class NukeAdapter(BaseAdapter):
 
     @staticmethod
     def getIconPath():
-        return os.path.join(NukeAdapter.getSettingsPath(), "P4Nuke", "perforce", "images")
+        return os.path.join(NukeAdapter.getSettingsPath(), "P4Nuke", "perforce", "Images")
     
     @staticmethod
     def getSceneFiles():

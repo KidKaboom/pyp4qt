@@ -45,7 +45,7 @@ class KatanaAdapter(BaseAdapter):
 
     @staticmethod
     def getIconPath():
-        return os.path.join(KatanaAdapter.getSettingsPath(), "P4Katana", "perforce", "images")
+        return os.path.join(KatanaAdapter.getSettingsPath(), "P4Katana", "perforce", "Images")
     
     @staticmethod
     def getSceneFiles():

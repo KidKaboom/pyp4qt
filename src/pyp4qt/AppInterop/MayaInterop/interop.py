@@ -141,7 +141,7 @@ class MayaInterop(BaseInterop):
 
     @staticmethod
     def getIconPath():
-        # return os.environ['MAYA_APP_DIR'] + "/scripts/Perforce/images/"
+        # return os.environ['MAYA_APP_DIR'] + "/scripts/Perforce/Images/"
         return GlobalVars.ICONS_DIR
 
     @staticmethod

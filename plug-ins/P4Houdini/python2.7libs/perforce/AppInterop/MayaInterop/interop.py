@@ -129,7 +129,7 @@ class MayaAdapter(BaseAdapter):
 
     @staticmethod
     def getIconPath():
-        return os.environ['MAYA_APP_DIR'] + "/scripts/Perforce/images/"
+        return os.environ['MAYA_APP_DIR'] + "/scripts/Perforce/Images/"
     
     @staticmethod
     def getSceneFiles():
