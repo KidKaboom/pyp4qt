@@ -15,7 +15,6 @@ logging.basicConfig(
     level = logging.DEBUG
 )
 
-from pyp4qt.perforce_utils import SetupConnection
 from pyp4qt import qt
 
 # Evil global

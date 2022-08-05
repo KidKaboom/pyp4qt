@@ -17,7 +17,7 @@ class BaseCallbacks(object):
         raise NotImplementedError
 
 
-class BaseAdapter(object):
+class Adapter(object):
     @staticmethod
     def setupEnvironment():
         pass

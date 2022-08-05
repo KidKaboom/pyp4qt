@@ -1,4 +1,5 @@
 # Project Modules
+import pyp4qt.utils
 from pyp4qt.session import Session, DepotFile, DepotDirectory, P4Exception
 
 # Python Modules
@@ -262,7 +263,7 @@ class DepotModel(QAbstractItemModel):
             item = parent.internalPointer()
 
         # FIXME: This is a hack to wake up the session. Can't expand an item without this. Not sure why this works.
-        self._session.connect()
+        pyp4qt.utils.connect()
 
         return item.hasChildren()
 

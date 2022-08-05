@@ -1,10 +1,11 @@
 import os
 import sys
 from P4 import P4, P4Exception
+
+import pyp4qt.utils
 from qtpy import QtCore, QtGui, QtWidgets
 
 from pyp4qt import utils
-from pyp4qt.perforce_utils import CmdsChangelist
 from pyp4qt.apps import interop
 from ErrorMessageWindow import displayErrorUI
 import DepotClientViewModel
@@ -200,7 +201,7 @@ class BaseRevisionTab(QtWidgets.QWidget):
         Utils.p4Logger().debug(filePath)
 
         desc = "Rollback #{0} to #{1}".format(currentRevision, rollbackRevision)
-        if CmdsChangelist.syncPreviousRevision(self.p4, filePath, rollbackRevision, desc):
+        if pyp4qt.utils.syncPreviousRevision(self.p4, filePath, rollbackRevision, desc):
             QtWidgets.QMessageBox.information(interop.main_parent_window(), "Success", "Successful {0}".format(desc))
 
         self.populateFileRevisions()

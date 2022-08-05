@@ -5,10 +5,10 @@ import re
 
 from P4 import P4, P4Exception
 
+import pyp4qt.utils
 from pyp4qt import utils
-from pyp4qt.perforce_utils import SetupConnection
 from pyp4qt.apps import interop
-from pyp4qt.perforce_utils.TestOutputAndProgress import TestOutputAndProgress
+from pyp4qt.TestOutputAndProgress import TestOutputAndProgress
 from pyp4qt.qt.SubmitProgressWindow import SubmitProgressUI
 
 from pyp4qt.qt.LoginWindow import firstTimeLogin
@@ -52,7 +52,7 @@ class MainShelf:
         except Exception as e:
             print("Error cleaning up P4 submit UI : ", e)
 
-        Utils.p4Logger().info("Disconnecting from server")
+        utils.p4Logger().info("Disconnecting from server")
         try:
             self.p4.disconnect()
         except Exception as e:
@@ -63,7 +63,7 @@ class MainShelf:
             try:
                 result = self.p4.run_login('-s')
             except P4Exception as e:
-                Utils.p4Logger().info('Connected to server, but no login session. Disconnecting and attempting to login again.')
+                utils.p4Logger().info('Connected to server, but no login session. Disconnecting and attempting to login again.')
                 with self.p4.at_exception_level(P4.RAISE_NONE):
                     self.p4.disconnect()
             
@@ -139,7 +139,7 @@ class MainShelf:
             return
 
         if not shotName[0]:
-            Utils.p4Logger().warning("Empty shot name")
+            utils.p4Logger().warning("Empty shot name")
             return
 
         shotNumDialog = QtWidgets.QInputDialog
@@ -150,19 +150,19 @@ class MainShelf:
             return
 
         if not shotNum[0]:
-            Utils.p4Logger().warning("Empty shot number")
+            utils.p4Logger().warning("Empty shot number")
             return
 
         shotNumberInt = -1
         try:
             shotNumberInt = int(shotNum[0])
         except ValueError as e:
-            Utils.p4Logger().warning(e)
+            utils.p4Logger().warning(e)
             return
 
-        Utils.p4Logger().info("Creating folder structure for shot {0}/{1} in {2}".format(
+        utils.p4Logger().info("Creating folder structure for shot {0}/{1} in {2}".format(
             shotName[0], shotNumberInt, self.p4.cwd))
-        dir = Utils.createShotFolders(self.p4.cwd, shotName[0], shotNumberInt)
+        dir = utils.createShotFolders(self.p4.cwd, shotName[0], shotNumberInt)
         self.run_checkoutFolder(None, dir)
 
     def createAsset(self, *args):
@@ -174,16 +174,16 @@ class MainShelf:
             return
 
         if not assetName[0]:
-            Utils.p4Logger().warning("Empty asset name")
+            utils.p4Logger().warning("Empty asset name")
             return
 
-        Utils.p4Logger().info("Creating folder structure for asset {0} in {1}".format(
+        utils.p4Logger().info("Creating folder structure for asset {0} in {1}".format(
             assetName[0], self.p4.cwd))
-        dir = Utils.createAssetFolders(self.p4.cwd, assetName[0])
+        dir = utils.createAssetFolders(self.p4.cwd, assetName[0])
         self.run_checkoutFolder(None, dir)
 
     def connectToServer(self, *args):
-        SetupConnection.connect(self.p4)
+        pyp4qt.utils.connect(self.p4)
 
     def loginAsUser(self, *args):
         LoginWindow.firstTimeLogin(enterUsername=True, enterPassword=True)
@@ -197,16 +197,16 @@ class MainShelf:
                 root, client = os.path.split(str(workspacePath))
                 self.p4.client = client
 
-                Utils.p4Logger().info(
+                utils.p4Logger().info(
                     "Setting current client to {0}".format(client))
                 # REALLY make sure we save the P4CLIENT variable
                 if platform.system() == "Linux" or platform.system() == "Darwin":
                     os.environ['P4CLIENT'] = self.p4.client
-                    Utils.saveEnvironmentVariable("P4CLIENT", self.p4.client)
+                    utils.saveEnvironmentVariable("P4CLIENT", self.p4.client)
                 else:
                     self.p4.set_env('P4CLIENT', self.p4.client)
 
-                Utils.writeToP4Config(
+                utils.writeToP4Config(
                     self.p4.p4config_file, "P4CLIENT", self.p4.client)
                 break
         else:
@@ -236,9 +236,9 @@ class MainShelf:
             workspaceSuffix = workspaceSuffixDialog.getText(
                 interop.main_parent_window(), "Workspace", "Optional Name Suffix (e.g. Uni, Home):")
 
-            Utils.createWorkspace(self.p4, workspaceRoot,
+            utils.createWorkspace(self.p4, workspaceRoot,
                                   str(workspaceSuffix[0]))
-            Utils.writeToP4Config(self.p4.p4config_file,
+            utils.writeToP4Config(self.p4.p4config_file,
                                   "P4CLIENT", self.p4.client)
         except P4Exception as e:
             displayErrorUI(e)
@@ -249,7 +249,7 @@ class MainShelf:
         fileDialog = QtWidgets.QFileDialog(interop.main_parent_window(), title, str(self.p4.cwd))
 
         def onEnter(*args):
-            if not Utils.isPathInClientRoot(self.p4, args[0]):
+            if not utils.isPathInClientRoot(self.p4, args[0]):
                 fileDialog.setDirectory(self.p4.cwd)
 
         def onComplete(*args):
@@ -262,23 +262,23 @@ class MainShelf:
             # Only add files if we didn't cancel
             if args[0] == 1:
                 for file in fileDialog.selectedFiles():
-                    if Utils.isPathInClientRoot(self.p4, file):
+                    if utils.isPathInClientRoot(self.p4, file):
                         try:
-                            Utils.p4Logger().info(p4command(p4args, file))
+                            utils.p4Logger().info(p4command(p4args, file))
                             selectedFiles.append(file)
                         except P4Exception as e:
-                            Utils.p4Logger().warning(e)
+                            utils.p4Logger().warning(e)
                             error = e
                     else:
-                        Utils.p4Logger().warning("{0} is not in client root.".format(file))
+                        utils.p4Logger().warning("{0} is not in client root.".format(file))
 
             fileDialog.deleteLater()
             if finishCallback:
                 finishCallback(selectedFiles, error)
 
         fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
-        fileDialog.directoryEntered.connect(onEnter)
-        fileDialog.finished.connect(onComplete)
+        pyp4qt.utils.connect(onEnter)
+        pyp4qt.utils.connect(onComplete)
         fileDialog.show()
 
     # Open up a QFileDialog sandboxed to only allow files relative to the workspace
@@ -288,7 +288,7 @@ class MainShelf:
         fileDialog = QtWidgets.QFileDialog(interop.main_parent_window(), title, str(self.p4.cwd))
 
         def onEnter(*args):
-            if not Utils.isPathInClientRoot(self.p4, args[0]):
+            if not utils.isPathInClientRoot(self.p4, args[0]):
                 fileDialog.setDirectory(self.p4.cwd)
 
         def onComplete(*args):
@@ -301,29 +301,29 @@ class MainShelf:
             # Only add files if we didn't cancel
             if args[0] == 1:
                 for file in fileDialog.selectedFiles():
-                    if Utils.isPathInClientRoot(self.p4, file):
+                    if utils.isPathInClientRoot(self.p4, file):
                         try:
-                            Utils.p4Logger().info(p4command(p4args, file))
+                            utils.p4Logger().info(p4command(p4args, file))
                             selectedFiles.append(file)
                         except P4Exception as e:
-                            Utils.p4Logger().warning(e)
+                            utils.p4Logger().warning(e)
                             error = e
                     else:
-                        Utils.p4Logger().warning("{0} is not in client root.".format(file))
+                        utils.p4Logger().warning("{0} is not in client root.".format(file))
 
             fileDialog.deleteLater()
             if finishCallback:
                 finishCallback(selectedFiles, error)
 
         fileDialog.setFileMode(QtWidgets.QFileDialog.DirectoryOnly)
-        fileDialog.directoryEntered.connect(onEnter)
-        fileDialog.finished.connect(onComplete)
+        pyp4qt.utils.connect(onEnter)
+        pyp4qt.utils.connect(onComplete)
         fileDialog.show()
 
     def checkoutFile(self, *args):
         def openFirstFile(selected, error):
             if not error:
-                if len(selected) == 1 and Utils.queryFileExtension(selected[0], interop.getSceneFiles()):
+                if len(selected) == 1 and utils.queryFileExtension(selected[0], interop.getSceneFiles()):
                     if not interop.getCurrentSceneFile() == selected[0]:
                         result = QtWidgets.QMessageBox.question(
                                     interop.main_parent_window(),
@@ -342,17 +342,17 @@ class MainShelf:
     def run_checkoutFolder(self, *args):
         allFiles = []
         for folder in args[1:]:
-            allFiles += Utils.queryFilesInDirectory(folder)
+            allFiles += utils.queryFilesInDirectory(folder)
 
         self.run_checkoutFile(None, *allFiles)
 
     def deletePending(self, *args):
-        changes = Utils.queryChangelists(self.p4, "pending")
-        Utils.forceChangelistDelete(self.p4, changes)
+        changes = utils.queryChangelists(self.p4, "pending")
+        utils.forceChangelistDelete(self.p4, changes)
 
     def run_checkoutFile(self, *args):
         for file in args[1:]:
-            Utils.p4Logger().info("Processing {0}...".format(file))
+            utils.p4Logger().info("Processing {0}...".format(file))
             result = None
             try:
                 # @ToDO set this up to use p4.at_exception_level
@@ -365,17 +365,17 @@ class MainShelf:
                     if 'otherLock' in result[0]:
                         raise P4Exception("[Warning]: {0} already locked by {1}\"".format(file, result[0]['otherLock'][0]))
                     else:
-                        Utils.p4Logger().info(self.p4.run_edit(file))
-                        Utils.p4Logger().info(self.p4.run_lock(file))
+                        utils.p4Logger().info(self.p4.run_edit(file))
+                        utils.p4Logger().info(self.p4.run_lock(file))
                 else:
-                    Utils.p4Logger().info(self.p4.run_add(file))
-                    Utils.p4Logger().info(self.p4.run_lock(file))
+                    utils.p4Logger().info(self.p4.run_add(file))
+                    utils.p4Logger().info(self.p4.run_lock(file))
             except P4Exception as e:
                 displayErrorUI(e)
 
     def deleteFile(self, *args):
         self.__processClientFile(
-            "Delete file(s)", None, lambda x: Utils.addReadOnlyBit(x), self.p4.run_delete)
+            "Delete file(s)", None, lambda x: utils.addReadOnlyBit(x), self.p4.run_delete)
 
     def revertFile(self, *args):
         self.__processClientFile(
@@ -400,7 +400,7 @@ class MainShelf:
         try:
             scene = interop.getCurrentSceneFile()
             if not scene:
-                Utils.p4Logger().warning("Current scene file isn't saved.")
+                utils.p4Logger().warning("Current scene file isn't saved.")
                 return
 
             with self.p4.at_exception_level(P4.RAISE_ERRORS):
@@ -435,7 +435,7 @@ class MainShelf:
             self.revisionUi.show()
         except:
             self.revisionUi.deleteLater()
-            Utils.p4Logger().error( traceback.format_exc() )
+            utils.p4Logger().error( traceback.format_exc() )
 
     def queryOpened(self, *args):
         try:
@@ -452,7 +452,7 @@ class MainShelf:
             self.openedUi.show()
         except:
             self.openedUi.deleteLater()
-            Utils.p4Logger().error( traceback.format_exc() )
+            utils.p4Logger().error( traceback.format_exc() )
 
     def submitChange(self, *args):
         try:
@@ -488,12 +488,12 @@ class MainShelf:
             self.submitUI.show()
         except:
             self.submitUI.deleteLater()
-            Utils.p4Logger().error( traceback.format_exc() )
+            utils.p4Logger().error( traceback.format_exc() )
 
     def syncFile(self, *args):
         try:
             self.p4.run_sync("-f", interop.getCurrentSceneFile())
-            Utils.p4Logger().info("Got latest revision for {0}".format(
+            utils.p4Logger().info("Got latest revision for {0}".format(
                 interop.getCurrentSceneFile()))
         except P4Exception as e:
             displayErrorUI(e)
@@ -516,13 +516,13 @@ class MainShelf:
 
         try:
             self.p4.run_sync("-f", "...")
-            Utils.p4Logger().info("Got latest revisions for client")
+            utils.p4Logger().info("Got latest revisions for client")
         except P4Exception as e:
             displayErrorUI(e)
 
     def syncAllChanged(self, *args):
         try:
             self.p4.run_sync("...")
-            Utils.p4Logger().info("Got latest revisions for client")
+            utils.p4Logger().info("Got latest revisions for client")
         except P4Exception as e:
             displayErrorUI(e)

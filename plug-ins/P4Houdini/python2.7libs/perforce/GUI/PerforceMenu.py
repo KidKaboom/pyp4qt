@@ -5,6 +5,7 @@ import re
 
 from P4 import P4, P4Exception
 
+import pyp4qt.utils
 from pyp4qt import utils
 from pyp4qt.perforce_utils import SetupConnection
 from pyp4qt.apps import interop
@@ -198,7 +199,7 @@ class MainShelf:
         self.run_checkoutFolder(None, dir)
 
     def connectToServer(self, *args):
-        SetupConnection.connect(self.p4)
+        pyp4qt.utils.connect(self.p4)
 
     def loginAsUser(self, *args):
         LoginWindow.firstTimeLogin(enterUsername=True, enterPassword=True)
@@ -292,8 +293,8 @@ class MainShelf:
                 finishCallback(selectedFiles, error)
 
         fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
-        fileDialog.directoryEntered.connect(onEnter)
-        fileDialog.finished.connect(onComplete)
+        pyp4qt.utils.connect(onEnter)
+        pyp4qt.utils.connect(onComplete)
         fileDialog.show()
 
     # Open up a QFileDialog sandboxed to only allow files relative to the workspace
@@ -331,8 +332,8 @@ class MainShelf:
                 finishCallback(selectedFiles, error)
 
         fileDialog.setFileMode(QtWidgets.QFileDialog.DirectoryOnly)
-        fileDialog.directoryEntered.connect(onEnter)
-        fileDialog.finished.connect(onComplete)
+        pyp4qt.utils.connect(onEnter)
+        pyp4qt.utils.connect(onComplete)
         fileDialog.show()
 
     def checkoutFile(self, *args):
@@ -362,8 +363,8 @@ class MainShelf:
         self.run_checkoutFile(None, *allFiles)
 
     def deletePending(self, *args):
-        changes = Utils.queryChangelists(self.p4, "pending")
-        Utils.forceChangelistDelete(self.p4, changes)
+        changes = pyp4qt.utils.queryChangelists(self.p4, "pending")
+        pyp4qt.utils.forceChangelistDelete(self.p4, changes)
 
     def run_checkoutFile(self, *args):
         for file in args[1:]:

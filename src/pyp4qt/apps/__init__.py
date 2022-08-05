@@ -6,10 +6,10 @@ import re
 import logging
 import glob
 
-import pyp4qt.utils as Utils
+from pyp4qt import utils
 
 cwd = os.path.dirname(os.path.realpath(__file__))
-
+logger = logging.getLogger("Perforce")
 
 def loadInteropModule(name, path):
     # file, filename, data = imp.find_module( name, [cwd])
@@ -41,10 +41,10 @@ for module in modules:
         if not mod.validate():
             continue
     except AttributeError as e:
-        Utils.p4Logger().debug('%s has no validate() method, skipping' % module)
+        logger.debug('%s has no validate() method, skipping' % module)
         continue
 
-    Utils.p4Logger().info("Configuring for %s" % module)
+    logger.info("Configuring for %s" % module)
     mod.setup()
     # submodule = getattr(mod, 'interop')
     submodule = loadInteropModule("{}.adapter".format(module_name), os.path.join(cwd, module))

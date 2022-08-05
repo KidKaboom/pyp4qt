@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 
+from pyp4qt import utils
 from test_perforce import TestingEnvironment, setupPythonEnvironment
 setupPythonEnvironment()
 
@@ -19,7 +20,7 @@ def displayMenuItem(ui, args):
             "checkout.folder":                  ui.checkoutFolder,
             "mark.delete":                      ui.deleteFile,
             "show.changelist":                  ui.queryOpened,
-            "submit.change":                    ui.submitChange,
+            "submit.change":                    utils.submitChange,
             "sync.all":                         ui.syncAllChanged,
             "sync.all.force":                   ui.syncAll,
             "depot.history":                    ui.fileRevisions,

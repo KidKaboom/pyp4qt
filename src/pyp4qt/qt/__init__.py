@@ -7,7 +7,7 @@ from distutils.version import StrictVersion
 
 from P4 import P4, P4Exception, Progress, OutputHandler
 
-import pyp4qt.utils as Utils
+from pyp4qt import utils
 import pyp4qt.qt.PerforceMenu as PerforceMenu
 from pyp4qt.apps import interop
 
@@ -31,7 +31,7 @@ def initMenu(p4):
 
         ui.addMenu()
     except ValueError as e:
-        Utils.p4Logger().critical(e)
+        utils.p4Logger().critical(e)
 
     # mu.executeDeferred('qt.addMenu()')
 

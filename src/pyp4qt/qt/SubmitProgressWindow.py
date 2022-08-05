@@ -2,6 +2,7 @@ from P4 import P4, P4Exception
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
+import pyp4qt.utils
 import pyp4qt.utils as Utils
 from pyp4qt.apps import interop
 
@@ -95,7 +96,7 @@ class SubmitProgressUI(QtWidgets.QDialog):
         Create the signal/slot connections
         '''
         # self.fileTree.clicked.connect( self.populateFileRevisions )
-        self.quitBtn.clicked.connect(self.cancelProgress)
+        pyp4qt.utils.connect(self.cancelProgress)
 
     #--------------------------------------------------------------------------
     # SLOTS

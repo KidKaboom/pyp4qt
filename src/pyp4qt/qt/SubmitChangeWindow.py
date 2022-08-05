@@ -3,10 +3,10 @@ import os
 from P4 import P4, P4Exception
 from PySide2 import QtCore, QtGui, QtWidgets
 
+import pyp4qt.utils
 from pyp4qt import utils
-from pyp4qt.perforce_utils import CmdsChangelist
 from pyp4qt.apps import interop
-from pyp4qt.perforce_utils.TestOutputAndProgress import TestOutputAndProgress
+from pyp4qt.TestOutputAndProgress import TestOutputAndProgress
 from pyp4qt.qt.SubmitProgressWindow import SubmitProgressUI
 
 class SubmitChangeUi(QtWidgets.QDialog):
@@ -145,8 +145,8 @@ class SubmitChangeUi(QtWidgets.QDialog):
         '''
         Create the signal/slot connections
         '''
-        self.submitBtn.clicked.connect(self.on_submit)
-        self.descriptionWidget.textChanged.connect(self.on_text_changed)
+        pyp4qt.utils.connect(self.on_submit)
+        pyp4qt.utils.connect(self.on_text_changed)
 
     # --------------------------------------------------------------------------
     # SLOTS
@@ -187,7 +187,7 @@ class SubmitChangeUi(QtWidgets.QDialog):
 
 
         try:
-            CmdsChangelist.submitChange(self.p4, files, str(
+            pyp4qt.utils.submitChange(self.p4, files, str(
                 self.descriptionWidget.toPlainText()), callback, keepCheckedOut)
             if not keepCheckedOut:
                 clientFiles = []

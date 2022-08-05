@@ -21,9 +21,8 @@ except ImportError:
 
 import maya.OpenMaya as api
 
-import pyp4qt.globals
 from pyp4qt.version import __version__
-from pyp4qt.apps.base_adapter import BaseAdapter, BaseCallbacks
+from pyp4qt.adapter import Adapter, BaseCallbacks
 from pyp4qt.apps.MayaAdapter import utils
 from pyp4qt import globals
 from PySide2 import QtCore, QtGui, QtWidgets
@@ -111,7 +110,7 @@ class MayaCallbacks(BaseCallbacks):
         api.MScriptUtil.setBool(inputBool, True)
 
 
-class MayaAdapter(BaseAdapter):
+class MayaAdapter(Adapter):
     @staticmethod
     def setupEnvironment():
         import maya.standalone
@@ -142,7 +141,7 @@ class MayaAdapter(BaseAdapter):
     @staticmethod
     def getIconPath():
         # return os.environ['MAYA_APP_DIR'] + "/scripts/Perforce/icons/"
-        return GlobalVars.ICONS_DIR
+        return globals.ICONS_DIR
 
     @staticmethod
     def getSceneFiles():

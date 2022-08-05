@@ -3,6 +3,7 @@ import os
 from P4 import P4, P4Exception
 from PySide2 import QtCore, QtGui, QtWidgets
 
+import pyp4qt.utils
 import pyp4qt.utils as Utils
 from pyp4qt.apps import interop
 
@@ -85,10 +86,10 @@ class OpenedFilesUI(QtWidgets.QDialog):
         '''
         Create the signal/slot connections
         '''
-        self.revertFileBtn.clicked.connect(self.revertSelected)
-        self.openSelectedBtn.clicked.connect(self.openSelectedFile)
-        self.tableWidget.clicked.connect(self.validateSelected)
-        self.refreshBtn.clicked.connect(self.updateTable)
+        pyp4qt.utils.connect(self.revertSelected)
+        pyp4qt.utils.connect(self.openSelectedFile)
+        pyp4qt.utils.connect(self.validateSelected)
+        pyp4qt.utils.connect(self.updateTable)
 
     # --------------------------------------------------------------------------
     #  SLOTS

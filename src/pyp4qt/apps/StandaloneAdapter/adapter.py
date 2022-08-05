@@ -2,11 +2,11 @@ import os
 
 from pyp4qt.version import __version__
 from PySide2 import QtCore, QtGui, QtWidgets
-from pyp4qt.apps.base_adapter import BaseAdapter
+from pyp4qt.adapter import Adapter
 from pyp4qt import utils
 
 
-class StandaloneAdapter(BaseAdapter):
+class StandaloneAdapter(Adapter):
     window = None
 
     @staticmethod
@@ -53,7 +53,7 @@ class StandaloneAdapter(BaseAdapter):
     @staticmethod
     def openScene(filePath):
         with open(filePath) as f:
-            Utils.p4Logger().info(f.read())
+            utils.p4Logger().info(f.read())
 
     @staticmethod
     def closeWindow(ui):

@@ -1,10 +1,11 @@
 import os
 
 from P4 import P4, P4Exception
+
+import pyp4qt.utils
 from qtpy import QtCore, QtGui, QtWidgets
 
 from pyp4qt import utils
-from pyp4qt.perforce_utils import CmdsChangelist
 from pyp4qt.apps import interop
 from pyp4qt.perforce_utils.TestOutputAndProgress import TestOutputAndProgress
 from SubmitProgressWindow import SubmitProgressUI
@@ -187,7 +188,7 @@ class SubmitChangeUi(QtWidgets.QDialog):
 
 
         try:
-            CmdsChangelist.submitChange(self.p4, files, str(
+            pyp4qt.utils.submitChange(self.p4, files, str(
                 self.descriptionWidget.toPlainText()), callback, keepCheckedOut)
             if not keepCheckedOut:
                 clientFiles = []

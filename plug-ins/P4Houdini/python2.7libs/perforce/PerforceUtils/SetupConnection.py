@@ -2,6 +2,7 @@ import os
 
 from P4 import P4, P4Exception
 
+import pyp4qt.utils
 from pyp4qt.utils import p4Logger
 
 def connect(p4):
@@ -15,7 +16,7 @@ def connect(p4):
 
         p4Logger().info('Connecting to server... %s' % p4.port)
         p4Logger().debug('Using p4config file: %s' % p4.p4config_file)
-        p4.connect()
+        pyp4qt.utils.connect()
 
     try:
         root = p4.fetch_client()
