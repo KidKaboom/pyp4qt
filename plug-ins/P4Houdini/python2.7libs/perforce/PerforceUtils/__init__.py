@@ -29,11 +29,11 @@ def parsePerforceError(e):
 #         print os.path.isfile( configpath )
 #         print os.path.isfile("C:/Users/tom/.p4config")
 #         if os.path.isfile( os.environ['P4CONFIG'].replace('\\', '/') ):
-#             p4Logger().info("Reading from config file at {0}".format(os.environ['P4CONFIG']) )
+#             logger().info("Reading from config file at {0}".format(os.environ['P4CONFIG']) )
 #             with open( os.environ['P4CONFIG'] ) as file:
 #                 for line in file:
 #                     key, value = line.split("=")
-#                     p4Logger().info("Setting {0}={1}".format(key,value))
+#                     logger().info("Setting {0}={1}".format(key,value))
 #                     p4.set_env(key, value)
 
 # # ToDo rewrite this AWFUL function
@@ -43,7 +43,7 @@ def parsePerforceError(e):
 #     found = False
 #     fileinput.close()
     
-#     p4Logger().info("Writing {0}:{1} to config {2}".format(key, value, config))
+#     logger().info("Writing {0}:{1} to config {2}".format(key, value, config))
 
 #     if config == 'noconfig':
 #         raise RuntimeError('No configuration file found (%s)' % config)
@@ -65,4 +65,4 @@ def parsePerforceError(e):
 #             with open(config, "a") as file:
 #                 file.write( "{0}={1}\n".format( key, value ) )
 #     except Exception as e:
-#         p4Logger().error(e)
+#         logger().error(e)

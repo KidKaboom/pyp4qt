@@ -2,14 +2,14 @@ import unittest
 import logging
 
 from pyp4qt.apps import interop
-from pyp4qt.qt import initMenu
+from pyp4qt.utils import initMenu
 
 from test_perforce import TestingEnvironment
 
 
 class PerforceUITests(unittest.TestCase):
     def setUp(self):
-        window, app = interop.setupEnvironment()
+        window, app = interop.setup_env()
         logging.basicConfig(level=logging.DEBUG)
 
         self.p4 = TestingEnvironment()

@@ -38,7 +38,7 @@ def firstTimeLogin(p4, enterUsername=True, enterPassword=True, parent=None, *arg
 
     # Validate SSH Login / Attempt to login
     try:
-        Utils.p4Logger().info(p4.run_login("-a"))
+        Utils.logger().info(p4.run_login("-a"))
     except P4Exception as e:
         regexKey = re.compile(r'(?:[0-9a-fA-F]:?){40}')
         # regexIP = re.compile(ur'[0-9]+(?:\.[0-9]+){3}?:[0-9]{4}')
@@ -48,8 +48,8 @@ def firstTimeLogin(p4, enterUsername=True, enterPassword=True, parent=None, *arg
         # ip = re.findall(regexIP, errorMsg)
 
         if key:
-            Utils.p4Logger().info(p4.run_trust("-i", key[0]))
-            Utils.p4Logger().info(p4.run_login("-a"))
+            Utils.logger().info(p4.run_trust("-i", key[0]))
+            Utils.logger().info(p4.run_login("-a"))
         else:
             raise e
 

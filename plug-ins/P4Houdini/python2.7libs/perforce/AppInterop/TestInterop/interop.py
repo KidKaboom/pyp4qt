@@ -52,7 +52,7 @@ class TestAdapter(BaseAdapter):
     @staticmethod
     def openScene(filePath):
         with open(filePath) as f:
-            Utils.p4Logger().info(f.read())
+            Utils.logger().info(f.read())
 
     @staticmethod
     def closeWindow(ui):

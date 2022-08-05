@@ -1,10 +1,13 @@
-import tempfile
+# Project Modules
 from pyp4qt.version import __version__
+
+# Python Modules
+import tempfile
 
 
 class Adapter(object):
     @staticmethod
-    def setupEnvironment():
+    def setup_env():
         pass
 
     @staticmethod
@@ -12,69 +15,69 @@ class Adapter(object):
         raise NotImplementedError
 
     @staticmethod
-    def createMenu(entries):
+    def create_menu(entries):
         from pyp4qt.apps import interop
 
         # We need to import interop so the appropriate class is used while creating the menus
         interop = interop()
-        interop.initializeMenu(entries)
-        interop.fillMenu(entries)
-        interop.addMenuLabel("", "Version {0}".format(__version__))
+        interop.init_menu(entries)
+        interop.fill_menu(entries)
+        interop.add_menu_label("", "Version {0}".format(__version__))
 
     @staticmethod
-    def getSettingsPath():
+    def get_settings_path():
         raise NotImplementedError
 
     @staticmethod
-    def getIconPath():
+    def get_icons_path():
         raise NotImplementedError
 
     @staticmethod
-    def getSceneFiles():
+    def get_scene_files():
         return []
 
     @staticmethod
-    def getTempPath():
+    def get_temp_path():
         return tempfile.gettempdir()
 
     @staticmethod
-    def getCurrentSceneFile():
+    def get_current_scene_file():
         raise NotImplementedError
 
     @staticmethod
-    def openScene(filePath):
+    def open_scene(filePath):
         raise NotImplementedError
 
     @staticmethod
-    def closeWindow(ui):
+    def close_window(ui):
         raise NotImplementedError
 
     @staticmethod
     def refresh():
         raise NotImplementedError
 
-    def initializeMenu(self, entries):
+    def init_menu(self, entries):
         raise NotImplementedError
 
-    def fillMenu(self, entries):
+    def fill_menu(self, entries):
         for entry in entries:
             if entry.get('divider'):
-                self.addMenuDivider("", entry.get('label'))
+                self.add_menu_divider("", entry.get('label'))
             elif entry.get('entries'):
-                self.addMenuSubmenu("", entry.get('label'), entry.get('image'), entry['entries'])
+                self.add_menu_submenu("", entry.get('label'), entry.get('image'), entry['entries'])
             elif entry.get('command'):
-                self.addMenuCommand("", entry.get('label'), entry.get('image'), entry.get('command'))
+                self.add_menu_command("", entry.get('label'), entry.get('image'), entry.get('command'))
             else:
                 raise ValueError('Unknown entry type for \'%s\'' % entry)
 
-    def addMenuDivider(self, menu, label):
+    def add_menu_divider(self, menu, label):
         raise NotImplementedError
 
-    def addMenuLabel(self, menu, label):
+    def add_menu_label(self, menu, label):
         raise NotImplementedError
 
-    def addMenuSubmenu(self, menu, label, icon, entries):
+    def add_menu_submenu(self, menu, label, icon, entries):
         raise NotImplementedError
 
-    def addMenuCommand(self, menu, label, icon, command):
+    def add_menu_command(self, menu, label, icon, command):
         raise NotImplementedError

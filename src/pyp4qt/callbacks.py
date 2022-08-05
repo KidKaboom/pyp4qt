@@ -1,14 +1,5 @@
-# Project Modules
 
-
-# Python Modules
-
-
-if __name__ == "__main__":
-    pass
-
-
-class BaseCallbacks(object):
+class Callbacks(object):
 
     @staticmethod
     def validateSubmit():

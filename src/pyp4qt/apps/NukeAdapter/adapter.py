@@ -9,13 +9,13 @@ import pyp4qt.globals
 from pyp4qt import utils
 from pyp4qt.version import __version__
 from pyp4qt.adapter import Adapter
-from pyp4qt.callbacks import BaseCallbacks
+from pyp4qt.callbacks import Callbacks
 from PySide2 import QtCore, QtGui, QtWidgets
 
 
 class NukeAdapter(Adapter):
     @staticmethod
-    def setupEnvironment():
+    def setup_env():
         pass
 
     @staticmethod
@@ -24,7 +24,7 @@ class NukeAdapter(Adapter):
         # return QtWidgets.QApplication.activeWindow()
   
     @staticmethod
-    def getSettingsPath():
+    def get_settings_path():
         if platform.system() == 'Windows':
             if os.environ.get('HOME'):
                 home = os.environ['HOME']
@@ -39,29 +39,29 @@ class NukeAdapter(Adapter):
             return os.path.expanduser('~/.nuke')
 
     @staticmethod
-    def getIconPath():
-        return os.path.join(NukeAdapter.getSettingsPath(), "P4Nuke", "perforce", "icons")
+    def get_icons_path():
+        return os.path.join(NukeAdapter.get_settings_path(), "P4Nuke", "perforce", "icons")
     
     @staticmethod
-    def getSceneFiles():
+    def get_scene_files():
         return ['.nk']
     
     @staticmethod
-    def getTempPath():
+    def get_temp_path():
         return os.environ['NUKE_TEMP_DIR']
 
     @staticmethod
-    def getCurrentSceneFile():
+    def get_current_scene_file():
         return nuke.root().name()
 
 
     @staticmethod
-    def openScene(filePath):
+    def open_scene(filePath):
         nuke.scriptOpen(filePath)
 
 
     @staticmethod
-    def closeWindow(ui):
+    def close_window(ui):
         pass
 
 
@@ -75,28 +75,28 @@ class NukeAdapter(Adapter):
     def sanitizeIconPath(self, iconPath):
         return os.path.basename(iconPath)
     
-    def initializeMenu(self, entries):
+    def init_menu(self, entries):
         m = nuke.menu( 'Nuke' )
         self.menu = m.addMenu( 'Perforce' )
 
-    def addMenuDivider(self, label):
+    def add_menu_divider(self, label):
         self.menu.addSeparator()
        
-    def addMenuLabel(self, label):
+    def add_menu_label(self, label):
         tmp = self.menu.addCommand(label, lambda: None)
         tmp.setEnabled(False)
 
-    def addMenuSubmenu(self, label, iconPath, entries):
+    def add_menu_submenu(self, label, iconPath, entries):
         # Save our current menu
         parent = self.menu
         self.menu = parent.addMenu(label, icon=self.sanitizeIconPath(iconPath))
 
         # Fill up the submenu
-        self.fillMenu(entries)
+        self.fill_menu(entries)
 
         # Reset our current menu
         self.menu = parent
 
 
-    def addMenuCommand(self, label, iconPath, command):
+    def add_menu_command(self, label, iconPath, command):
         self.menu.addCommand(label, command, icon=self.sanitizeIconPath(iconPath))

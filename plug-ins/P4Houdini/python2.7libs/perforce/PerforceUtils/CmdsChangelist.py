@@ -1,7 +1,7 @@
 import re
 
 from P4 import P4, P4Exception
-from pyp4qt.utils import p4Logger
+from pyp4qt.utils import logger
 from pyp4qt.perforce_utils import SetupConnection
 from pyp4qt.qt.ErrorMessageWindow import displayErrorUI
 
@@ -14,12 +14,12 @@ def queryChangelists( p4, status = None):
     try:
         return p4.run(args)
     except P4Exception as e:
-        p4Logger().warning(e)
+        logger().warning(e)
         raise e
 
 def submitChange(p4, files, description, callback, keepCheckedOut = False):
     # Shitty method #1
-    p4Logger().info("Files Passed for submission = {0}".format(files))
+    logger().info("Files Passed for submission = {0}".format(files))
     
     print "Opened ", p4.run_opened("...")
 
@@ -33,18 +33,18 @@ def submitChange(p4, files, description, callback, keepCheckedOut = False):
    
     changeFiles = [ entry['clientFile'] for entry in opened ]# change._files
 
-    p4Logger().info("Changelist = {0}".format(changeFiles))
+    logger().info("Changelist = {0}".format(changeFiles))
 
     for changeFile in changeFiles:
         if changeFile in files:
             fileList.append(changeFile)
         else:
-            p4Logger().warning("File {0} ({1}) not in changelist".format(changeFile, p4.run_opened(changeFile)[0]['action']))
+            logger().warning("File {0} ({1}) not in changelist".format(changeFile, p4.run_opened(changeFile)[0]['action']))
             
-    p4Logger().info("Final changelist files = {0}".format(fileList)) 
+    logger().info("Final changelist files = {0}".format(fileList))
 
-    p4Logger().debug( [ x['clientFile'] for x in fullChangelist ] )
-    p4Logger().debug( [ x['clientFile'] for x in opened ] )
+    logger().debug([x['clientFile'] for x in fullChangelist])
+    logger().debug([x['clientFile'] for x in opened])
 
     notSubmitted = list(set( [ x['clientFile'] for x in fullChangelist ] ) - set( [ x['clientFile'] for x in opened ] ))
 
@@ -59,9 +59,9 @@ def submitChange(p4, files, description, callback, keepCheckedOut = False):
             result = p4.run_submit("-r", "-d", description, progress=callback, handler=callback)
         else:
             result = p4.run_submit("-d", description, progress=callback, handler=callback)
-        p4Logger().info(result)
+        logger().info(result)
     except P4Exception as e:
-        p4Logger().warning(e)
+        logger().warning(e)
         raise e
 
     p4.progress = None
@@ -78,13 +78,13 @@ def submitChange(p4, files, description, callback, keepCheckedOut = False):
     #         result = p4.run_submit(change, "-r")
     #     else:
     #         result = p4.run_submit(change)
-    #     p4Logger().info(result)
+    #     logger().info(result)
     # except P4Exception as e:
-    #     p4Logger().warning(e)
+    #     logger().warning(e)
     #     raise e
 
 def syncPreviousRevision(p4, file, revision, description):
-    p4Logger().info(p4.run_sync("-f", "{0}#{1}".format(file, revision)))
+    logger().info(p4.run_sync("-f", "{0}#{1}".format(file, revision)))
 
     change = p4.fetch_change()
     change._description = description
@@ -102,22 +102,22 @@ def syncPreviousRevision(p4, file, revision, description):
         
         # Try to remove from changelist if we have it checked out
         try:
-            p4Logger().info( p4.run_revert("-k", file) )
+            logger().info(p4.run_revert("-k", file))
         except P4Exception as e:
             errors.append(e)
         
         try:
-            p4Logger().info( p4.run_edit("-c", changeId, file) )
+            logger().info(p4.run_edit("-c", changeId, file))
         except P4Exception as e:
             errors.append(e)
             
         try:
-            p4Logger().info( p4.run_sync("-f", file) )
+            logger().info(p4.run_sync("-f", file))
         except P4Exception as e:
             errors.append(e)
         
         try:
-            p4Logger().info( p4.run_resolve("-ay") )
+            logger().info(p4.run_resolve("-ay"))
         except P4Exception as e:
             errors.append(e)
 
@@ -127,7 +127,7 @@ def syncPreviousRevision(p4, file, revision, description):
             errors.append(e)
             
         try:
-            p4Logger().info( p4.run_submit(change) )
+            logger().info(p4.run_submit(change))
         except P4Exception as e:
             errors.append(e)
         
@@ -145,16 +145,16 @@ def forceChangelistDelete(p4, lists):
             isClient = (list['client'] == p4.client)
             
             if isUser and isClient:
-                p4Logger().info("Deleting change {0} on client {1}".format(list['change'], list['client']))
+                logger().info("Deleting change {0} on client {1}".format(list['change'], list['client']))
                 try:
                     p4.run_unlock("-c", list['change'])
                     p4.run_revert("-c", list['change'], "...")
                 except P4Exception as e:
                     pass
-                p4Logger().info(p4.run_change("-d", list['change']))
+                logger().info(p4.run_change("-d", list['change']))
             if not isUser:
-                p4Logger().warning( "User {0} doesn't own change {1}, can't delete".format(p4.user, list['change']) )
+                logger().warning("User {0} doesn't own change {1}, can't delete".format(p4.user, list['change']))
             if not isClient:
-                p4Logger().warning( "Client {0} doesn't own change {1}, can't delete".format(p4.client, list['change']) )
+                logger().warning("Client {0} doesn't own change {1}, can't delete".format(p4.client, list['change']))
         except P4Exception as e:
-            p4Logger().critical(e)
+            logger().critical(e)

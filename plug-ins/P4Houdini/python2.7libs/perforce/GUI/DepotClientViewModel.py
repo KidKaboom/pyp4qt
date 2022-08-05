@@ -72,7 +72,7 @@ class PerforceItemModel(QtCore.QAbstractItemModel):
 
     def populate(self, rootdir):
         self.rootItem = PerforceItem(None)
-        Utils.p4Logger().debug('Populating: %s' % rootdir)
+        Utils.logger().debug('Populating: %s' % rootdir)
         self.populateSubDir(idx=None, root=rootdir)
 
     def populateSubDir(self, idx=None, root="//depot"):
@@ -118,12 +118,12 @@ class PerforceItemModel(QtCore.QAbstractItemModel):
                 if isClientPath:
                     f['dir'] = f['dir'].replace('//depot', clientRoot)
 
-                Utils.p4Logger().debug('Dir: \t%s' % f['dir'] )
+                Utils.logger().debug('Dir: \t%s' % f['dir'])
                 treeItem.appendFolderItem(f['dir'])
             
             for f in files:
                 filepath = f['depotFile'] if isDepotPath else f['clientFile']
-                Utils.p4Logger().debug('File: \t%s' % filepath)
+                Utils.logger().debug('File: \t%s' % filepath)
 
                 # Check if this is in a pending changelist,
                 # which gives us different fields to query
@@ -151,9 +151,9 @@ class PerforceItemModel(QtCore.QAbstractItemModel):
                 p4fstat = self.p4.run_fstat(*fstat_pending_args)
                 if p4fstat:
                     p4fstat = p4fstat[0]
-                    Utils.p4Logger().debug('fstat(%s): %s' % (fstat_pending_args, p4fstat['clientFile']))
+                    Utils.logger().debug('fstat(%s): %s' % (fstat_pending_args, p4fstat['clientFile']))
 
-                    workspaceRoot = os.path.normpath(self.p4.run_info()[0]['clientRoot'].replace('\\', '/'))
+                    workspaceRoot = os.path.normpath(self.p4.run_info()[0]['client_root'].replace('\\', '/'))
                     p4path = os.path.normpath(p4path).replace(workspaceRoot, '')
                     p4PendingPath = os.path.normpath(p4fstat['clientFile']).replace(workspaceRoot, '')
 
@@ -166,13 +166,13 @@ class PerforceItemModel(QtCore.QAbstractItemModel):
                         currentDir = uncommonDirectories[0]
                         currentFolders = [ os.path.basename(f['dir']) for f in folders ]
 
-                        Utils.p4Logger().debug( commonPrefixSplit )
-                        Utils.p4Logger().debug( uncommonDirectories )
+                        Utils.logger().debug(commonPrefixSplit)
+                        Utils.logger().debug(uncommonDirectories)
                         if not currentDir in currentFolders:
-                            Utils.p4Logger().debug('Adding pending path folder')
+                            Utils.logger().debug('Adding pending path folder')
                             treeItem.appendFolderItem( os.path.join(p4path, currentDir) )
 
-        Utils.p4Logger().debug('\n\n')
+        Utils.logger().debug('\n\n')
 
     def p4Filelist(self, path):
         results = []
@@ -229,17 +229,17 @@ class PerforceItemModel(QtCore.QAbstractItemModel):
                 isDeleted = index.internalPointer().data[3] == 'delete'
 
                 if isDeleted:
-                    return QtGui.QIcon(os.path.join(interop.getIconPath(), 'File0104.png'))
+                    return QtGui.QIcon(os.path.join(interop.get_icons_path(), 'File0104.png'))
 
                 # Try to figure out which icon is most applicable to the item
                 if itemType == "Folder":
-                    return QtGui.QIcon(os.path.join(interop.getIconPath(), 'File0059.png'))
+                    return QtGui.QIcon(os.path.join(interop.get_icons_path(), 'File0059.png'))
                 elif "binary" in itemType:
-                    return QtGui.QIcon(os.path.join(interop.getIconPath(), 'File0315.png'))
+                    return QtGui.QIcon(os.path.join(interop.get_icons_path(), 'File0315.png'))
                 elif "text" in itemType:
-                    return QtGui.QIcon(os.path.join(interop.getIconPath(), 'File0027.png'))
+                    return QtGui.QIcon(os.path.join(interop.get_icons_path(), 'File0027.png'))
                 else:
-                    return QtGui.QIcon(os.path.join(interop.getIconPath(), 'File0106.png'))
+                    return QtGui.QIcon(os.path.join(interop.get_icons_path(), 'File0106.png'))
             else:
                 return None
 

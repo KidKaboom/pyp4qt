@@ -10,7 +10,7 @@ class StandaloneAdapter(Adapter):
     window = None
 
     @staticmethod
-    def setupEnvironment():
+    def setup_env():
         class TestWidget(QtWidgets.QWidget):
             def keyPressEvent(self, e):
                 if e.key() == QtCore.Qt.Key_Escape:
@@ -26,44 +26,44 @@ class StandaloneAdapter(Adapter):
         return StandaloneAdapter.window
 
     @staticmethod
-    def getSettingsPath():
+    def get_settings_path():
         cwd = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
         return cwd
 
     @staticmethod
-    def getIconPath():
+    def get_icons_path():
         cwd = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
         iconpath = os.path.join(cwd, "../icons/")
         return os.path.realpath(iconpath)
 
     @staticmethod
-    def getSceneFiles():
+    def get_scene_files():
         return ['.txt']
 
     @staticmethod
-    def getTempPath():
+    def get_temp_path():
         import tempfile
         return tempfile.gettempdir()
 
     @staticmethod
-    def getCurrentSceneFile():
+    def get_current_scene_file():
         import tempfile
         return tempfile.TemporaryFile().name
 
     @staticmethod
-    def openScene(filePath):
+    def open_scene(filePath):
         with open(filePath) as f:
-            utils.p4Logger().info(f.read())
+            utils.logger().info(f.read())
 
     @staticmethod
-    def closeWindow(ui):
+    def close_window(ui):
         raise NotImplementedError
 
     @staticmethod
     def refresh():
         pass
 
-    def initializeMenu(self, entries):
+    def init_menu(self, entries):
         window = StandaloneAdapter.window
         vbox = QtWidgets.QVBoxLayout()
         window.setLayout(vbox)
@@ -72,22 +72,22 @@ class StandaloneAdapter(Adapter):
         self.menu = self.menu_bar.addMenu('Perforce')
         vbox.addWidget(self.menu_bar)
 
-    def addMenuDivider(self, menu, label):
+    def add_menu_divider(self, menu, label):
         self.menu.addSeparator()
 
-    def addMenuLabel(self, menu, label):
+    def add_menu_label(self, menu, label):
         self.menu.addAction(label)
 
-    def addMenuSubmenu(self, menu, label, icon, entries):
+    def add_menu_submenu(self, menu, label, icon, entries):
         # Save our current menu
         parent = self.menu
         self.menu = parent.addMenu(QtGui.QIcon(icon), label)
 
         # Fill up the submenu
-        self.fillMenu(entries)
+        self.fill_menu(entries)
 
         # Reset our current menu
         self.menu = parent
 
-    def addMenuCommand(self, menu, label, icon, command):
+    def add_menu_command(self, menu, label, icon, command):
         self.menu.addAction(QtGui.QIcon(icon), label, command)

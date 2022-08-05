@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 import os
 # import platform
-# def getSettingsPath():
+# def get_settings_path():
 #     user_dir = os.getenv("KATANA_USER_RESOURCE_DIRECTORY")
 #     if user_dir:
 #         return user_dir

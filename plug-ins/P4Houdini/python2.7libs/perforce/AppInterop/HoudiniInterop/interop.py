@@ -86,7 +86,7 @@ class HoudiniAdapter(BaseAdapter):
         # self.menu = parent.addMenu(label, icon=self.sanitizeIconPath(iconPath))
 
         # # Fill up the submenu
-        # self.fillMenu(entries)
+        # self.fill_menu(entries)
 
         # # Reset our current menu
         # self.menu = parent

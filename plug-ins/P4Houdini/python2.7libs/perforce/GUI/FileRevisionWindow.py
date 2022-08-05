@@ -16,7 +16,7 @@ class BaseRevisionTab(QtWidgets.QWidget):
 
         self.p4 = p4
 
-        path = os.path.join(interop.getIconPath(), "p4.png")
+        path = os.path.join(interop.get_icons_path(), "p4.png")
         icon = QtGui.QIcon(path)
 
         self.setWindowTitle("File Revisions")
@@ -87,8 +87,8 @@ class BaseRevisionTab(QtWidgets.QWidget):
         self.horizontalLine = QtWidgets.QFrame()
         # self.horizontalLine.setFrameShape(QtWidgets.QFrame.Shape.HLine)
 
-        if interop.getCurrentSceneFile():
-            # self.fileTree.setCurrentIndex(self.model.index(interop.getCurrentSceneFile()))
+        if interop.get_current_scene_file():
+            # self.fileTree.setCurrentIndex(self.model.index(interop.get_current_scene_file()))
             self.populateFileRevisions()
 
     def create_layout(self):
@@ -135,10 +135,10 @@ class BaseRevisionTab(QtWidgets.QWidget):
 
         treeItem = index.internalPointer()
 
-        Utils.p4Logger().debug('Expanding %s...' % treeItem.data[-1])
+        Utils.logger().debug('Expanding %s...' % treeItem.data[-1])
 
         if not index.child(0,0).isValid():
-            Utils.p4Logger().debug('\tLoading empty directory')
+            Utils.logger().debug('\tLoading empty directory')
             self.model.populateSubDir(index, self.root)
 
         self.fileTree.setModel(self.model)
@@ -157,14 +157,14 @@ class BaseRevisionTab(QtWidgets.QWidget):
         filePath = data[-1]
         fileName = data[0]
 
-        path = os.path.join(interop.getTempPath(), fileName)
+        path = os.path.join(interop.get_temp_path(), fileName)
 
         try:
             tmpPath = path
             self.p4.run_print("-o", tmpPath, "{0}#{1}".format(filePath, revision))
-            Utils.p4Logger().info("Synced preview to {0} at revision {1}".format(tmpPath, revision))
+            Utils.logger().info("Synced preview to {0} at revision {1}".format(tmpPath, revision))
             if self.isSceneFile:
-                interop.openScene(tmpPath)
+                interop.open_scene(tmpPath)
             else:
                 Utils.open_file(tmpPath)
 
@@ -198,10 +198,10 @@ class BaseRevisionTab(QtWidgets.QWidget):
         # Full path is stored in the final column
         filePath = data[-1]
 
-        Utils.p4Logger().debug(filePath)
+        Utils.logger().debug(filePath)
 
         desc = "Rollback #{0} to #{1}".format(currentRevision, rollbackRevision)
-        if pyp4qt.utils.syncPreviousRevision(self.p4, filePath, rollbackRevision, desc):
+        if pyp4qt.utils.sync_previous_revision(self.p4, filePath, rollbackRevision, desc):
             QtWidgets.QMessageBox.information(interop.main_parent_window(), "Success", "Successful {0}".format(desc))
 
         self.populateFileRevisions()
@@ -216,7 +216,7 @@ class BaseRevisionTab(QtWidgets.QWidget):
 
         try:
             self.p4.run_sync("-f", filePath)
-            Utils.p4Logger().info("{0} synced to latest version".format(filePath))
+            Utils.logger().info("{0} synced to latest version".format(filePath))
             self.populateFileRevisions()
         except P4Exception as e:
             displayErrorUI(e)
@@ -259,7 +259,7 @@ class BaseRevisionTab(QtWidgets.QWidget):
         try:
             index = self.fileTree.selectedIndexes()
         except IndexError as e:
-            Utils.p4Logger().error(e)
+            Utils.logger().error(e)
             raise
 
         if not index or not index[0].internalPointer().data:
@@ -269,7 +269,7 @@ class BaseRevisionTab(QtWidgets.QWidget):
         try:
             name, filetype, time, action, change, fullname = index.internalPointer().data
         except ValueError as e:
-            Utils.p4Logger().info(index.internalPointer().data)
+            Utils.logger().info(index.internalPointer().data)
             raise e
 
 
@@ -289,7 +289,7 @@ class BaseRevisionTab(QtWidgets.QWidget):
             self.getLatestBtn.setVisible(True)
             self.getPreviewBtn.setVisible(True)
 
-        if Utils.queryFileExtension(fullname, interop.getSceneFiles() ):
+        if Utils.query_extension(fullname, interop.get_scene_files()):
             self.getPreviewBtn.setEnabled(True)
             self.getPreviewBtn.setText("Preview Scene Revision")
             self.isSceneFile = True
@@ -303,7 +303,7 @@ class BaseRevisionTab(QtWidgets.QWidget):
                 files = self.p4.run_filelog("-l", fullname)
         except P4Exception as e:
             # TODO - Better error handling here, what if we can't connect etc
-            #eMsg, type = parsePerforceError(e)
+            #eMsg, type = parse_perforce_error(e)
             self.statusBar.showMessage("{0} isn't on client".format(os.path.basename(fullname)))
             self.clearRevisions()
             self.getLatestBtn.setEnabled(False)
@@ -342,7 +342,7 @@ class BaseRevisionTab(QtWidgets.QWidget):
         self.fileRevisions = []
 
         if files:
-            Utils.p4Logger().debug( 'filelog(%s):%s' % (fullname, files) )
+            Utils.logger().debug('filelog(%s):%s' % (fullname, files))
 
             for revision in files[0].each_revision():
                 self.fileRevisions.append({"revision": revision.rev,
@@ -357,11 +357,11 @@ class BaseRevisionTab(QtWidgets.QWidget):
 
             # Map a file action to the path of it's UI icon
             actionToIcon = {
-                    'edit':         os.path.join(interop.getIconPath(), "File0440.png"),
-                    'add':          os.path.join(interop.getIconPath(), "File0242.png"),
-                    'delete':       os.path.join(interop.getIconPath(), "File0253.png"),
-                    'move/delete':  os.path.join(interop.getIconPath(), "File0253.png"),
-                    'purge':        os.path.join(interop.getIconPath(), "File0253.png")
+                    'edit':         os.path.join(interop.get_icons_path(), "File0440.png"),
+                    'add':          os.path.join(interop.get_icons_path(), "File0242.png"),
+                    'delete':       os.path.join(interop.get_icons_path(), "File0253.png"),
+                    'move/delete':  os.path.join(interop.get_icons_path(), "File0253.png"),
+                    'purge':        os.path.join(interop.get_icons_path(), "File0253.png")
                 }
 
             # Populate table
@@ -387,7 +387,7 @@ class ClientRevisionTab(BaseRevisionTab):
         super(ClientRevisionTab, self).__init__(p4, parent)
 
         # self.setRoot( "//{0}".format(self.p4.client) )
-        self.setRoot( self.p4.run_info()[0]['clientRoot'].replace('\\', '/') )
+        self.setRoot( self.p4.run_info()[0]['client_root'].replace('\\', '/') )
 
 class DepotRevisionTab(BaseRevisionTab):
     def __init__(self, p4, parent=None):
@@ -401,7 +401,7 @@ class FileRevisionUI(QtWidgets.QWidget):
 
         self.p4 = p4
 
-        path = os.path.join(interop.getIconPath(), "p4.png")
+        path = os.path.join(interop.get_icons_path(), "p4.png")
         icon = QtGui.QIcon(path)
 
         self.setWindowTitle("File Revisions")

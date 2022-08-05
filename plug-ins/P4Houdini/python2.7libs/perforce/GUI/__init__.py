@@ -12,7 +12,7 @@ import PerforceMenu
 from pyp4qt.apps import interop
 
 # try:
-#     AppUtils.closeWindow(qt.perforceMenu)
+#     AppUtils.close_window(qt.perforceMenu)
 # except:
 #     qt = None
 
@@ -20,7 +20,7 @@ def initMenu(p4):
     global ui
     # try:
     #     # cmds.deleteUI(qt.perforceMenu)
-    #     AppUtils.closeWindow(qt.perforceMenu)
+    #     AppUtils.close_window(qt.perforceMenu)
     # except:
     #     pass
 
@@ -31,7 +31,7 @@ def initMenu(p4):
 
         ui.addMenu()
     except ValueError as e:
-        Utils.p4Logger().critical(e)
+        Utils.logger().critical(e)
 
     # mu.executeDeferred('qt.addMenu()')
 
@@ -43,7 +43,7 @@ def cleanupMenu():
 
     # try:
     #     # cmds.deleteUI(qt.perforceMenu)
-    #     AppUtils.closeWindow(qt.perforceMenu)
+    #     AppUtils.close_window(qt.perforceMenu)
     # except Exception as e:
     #     raise e
 

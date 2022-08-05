@@ -8,7 +8,7 @@ from P4 import P4, P4Exception
 import pyp4qt.utils
 from pyp4qt import utils
 from pyp4qt.apps import interop
-from pyp4qt.TestOutputAndProgress import TestOutputAndProgress
+from pyp4qt.test_output_progress import TestOutputProgress
 from pyp4qt.qt.SubmitProgressWindow import SubmitProgressUI
 
 from pyp4qt.qt.LoginWindow import firstTimeLogin
@@ -41,7 +41,7 @@ class MainShelf:
         # try:
         #     # Deleting maya menus is bad, but this is a dumb way of error checking
         #     if "PerforceMenu" in self.perforceMenu:
-        #         interop.closeWindow(self.perforceMenu)
+        #         interop.close_window(self.perforceMenu)
         #     else:
         #         raise RuntimeError("Menu name doesn't seem to belong to Perforce, not deleting")
         # except Exception  as e:
@@ -52,7 +52,7 @@ class MainShelf:
         except Exception as e:
             print("Error cleaning up P4 submit UI : ", e)
 
-        utils.p4Logger().info("Disconnecting from server")
+        utils.logger().info("Disconnecting from server")
         try:
             self.p4.disconnect()
         except Exception as e:
@@ -63,7 +63,7 @@ class MainShelf:
             try:
                 result = self.p4.run_login('-s')
             except P4Exception as e:
-                utils.p4Logger().info('Connected to server, but no login session. Disconnecting and attempting to login again.')
+                utils.logger().info('Connected to server, but no login session. Disconnecting and attempting to login again.')
                 with self.p4.at_exception_level(P4.RAISE_NONE):
                     self.p4.disconnect()
             
@@ -73,7 +73,7 @@ class MainShelf:
             self.connectToServer(args)
         else:
             # A little heavy handed, but forces the cwd to the client root even if we have a valid login ticket
-            self.p4.cwd = self.p4.run_info()[0]['clientRoot'].replace('\\', '/')
+            self.p4.cwd = self.p4.run_info()[0]['client_root'].replace('\\', '/')
 
         if not self.p4.connected():
             QtWidgets.QMessageBox.critical(None, 'Perforce Error', "Can't connect to server, check 'p4 set' for more information about what could be wrong", QtWidgets.QMessageBox.Warning)
@@ -83,7 +83,7 @@ class MainShelf:
 
     def addMenu(self):
         try:
-            interop.closeWindow(self.perforceMenu)
+            interop.close_window(self.perforceMenu)
         except:
             pass
 
@@ -91,41 +91,41 @@ class MainShelf:
 
         menuEntries = [
             {'label': "Client Commands",            'divider': True},
-            {'label': "Checkout File(s)",           'image': os.path.join(interop.getIconPath(), "File0078.png"), 'command': lambda *args: self.validateConnected(self.checkoutFile, args)},
-            {'label': "Checkout Folder",            'image': os.path.join(interop.getIconPath(), "File0186.png"), 'command': lambda *args: self.validateConnected(self.checkoutFolder, args)},
-            {'label': "Mark for Delete",            'image': os.path.join(interop.getIconPath(), "File0253.png"), 'command': lambda *args: self.validateConnected(self.deleteFile, args)},
-            {'label': "Show Changelist",            'image': os.path.join(interop.getIconPath(), "File0252.png"), 'command': lambda *args: self.validateConnected(self.queryOpened, args)},
+            {'label': "Checkout File(s)",           'image': os.path.join(interop.get_icons_path(), "File0078.png"), 'command': lambda *args: self.validateConnected(self.checkoutFile, args)},
+            {'label': "Checkout Folder",            'image': os.path.join(interop.get_icons_path(), "File0186.png"), 'command': lambda *args: self.validateConnected(self.checkoutFolder, args)},
+            {'label': "Mark for Delete",            'image': os.path.join(interop.get_icons_path(), "File0253.png"), 'command': lambda *args: self.validateConnected(self.deleteFile, args)},
+            {'label': "Show Changelist",            'image': os.path.join(interop.get_icons_path(), "File0252.png"), 'command': lambda *args: self.validateConnected(self.queryOpened, args)},
             {'label': "Depot Commands",             'divider': True},
-            {'label': "Submit Change",              'image': os.path.join(interop.getIconPath(), "File0107.png"), 'command': lambda *args: self.validateConnected(self.submitChange, args)},
-            {'label': "Sync All",                   'image': os.path.join(interop.getIconPath(), "File0175.png"), 'command': lambda *args: self.validateConnected(self.syncAllChanged, args)},
-            {'label': "Sync All - Force",           'image': os.path.join(interop.getIconPath(), "File0175.png"), 'command': lambda *args: self.validateConnected(self.syncAll, args)},
-            # {'label': "Sync All References",        'image': os.path.join(interop.getIconPath(), "File0320.png"), 'command': lambda *args: self.validateConnected(self.syncAllChanged, args)},
-            #{'label': "Get Latest Scene",          'image': os.path.join(interop.getIconPath(), "File0275.png"), command = self.syncFile},
-            {'label': "Show Depot History",         'image': os.path.join(interop.getIconPath(), "File0279.png"), 'command': lambda *args: self.validateConnected(self.fileRevisions, args)},
+            {'label': "Submit Change",              'image': os.path.join(interop.get_icons_path(), "File0107.png"), 'command': lambda *args: self.validateConnected(self.submitChange, args)},
+            {'label': "Sync All",                   'image': os.path.join(interop.get_icons_path(), "File0175.png"), 'command': lambda *args: self.validateConnected(self.syncAllChanged, args)},
+            {'label': "Sync All - Force",           'image': os.path.join(interop.get_icons_path(), "File0175.png"), 'command': lambda *args: self.validateConnected(self.syncAll, args)},
+            # {'label': "Sync All References",        'image': os.path.join(interop.get_icons_path(), "File0320.png"), 'command': lambda *args: self.validateConnected(self.syncAllChanged, args)},
+            #{'label': "Get Latest Scene",          'image': os.path.join(interop.get_icons_path(), "File0275.png"), command = self.syncFile},
+            {'label': "Show Depot History",         'image': os.path.join(interop.get_icons_path(), "File0279.png"), 'command': lambda *args: self.validateConnected(self.fileRevisions, args)},
 
             {'label': "Scene",                      'divider': True},
-            {'label': "File Status",                'image': os.path.join(interop.getIconPath(), "File0409.png"), 'command': lambda *args: self.validateConnected(self.querySceneStatus, args)},
+            {'label': "File Status",                'image': os.path.join(interop.get_icons_path(), "File0409.png"), 'command': lambda *args: self.validateConnected(self.querySceneStatus, args)},
 
             {'label': "Utility",                    'divider': True},
-            {'label': "Create Asset",               'image': os.path.join(interop.getIconPath(), "File0352.png"), 'command': lambda *args: self.createAsset(args) },
-            {'label': "Create Shot",                'image': os.path.join(interop.getIconPath(), "File0104.png"), 'command': lambda *args: self.createShot(args) },
+            {'label': "Create Asset",               'image': os.path.join(interop.get_icons_path(), "File0352.png"), 'command': lambda *args: self.createAsset(args)},
+            {'label': "Create Shot",                'image': os.path.join(interop.get_icons_path(), "File0104.png"), 'command': lambda *args: self.createShot(args)},
             # Submenu
             {
-                'label': "Miscellaneous",           'image': os.path.join(interop.getIconPath(), "File0411.png"), 'entries': [
+                'label': "Miscellaneous",           'image': os.path.join(interop.get_icons_path(), "File0411.png"), 'entries': [
                     {'label': "Server",                     'divider': True},
-                    {'label': "Login as user",              'image': os.path.join(interop.getIconPath(), "File0077.png"),    'command': lambda *args: self.validateConnected(self.loginAsUser, args)},
-                    {'label': "Server Info",                'image': os.path.join(interop.getIconPath(), "File0031.png"),    'command': lambda *args: self.validateConnected(self.queryServerStatus, args)},
+                    {'label': "Login as user",              'image': os.path.join(interop.get_icons_path(), "File0077.png"), 'command': lambda *args: self.validateConnected(self.loginAsUser, args)},
+                    {'label': "Server Info",                'image': os.path.join(interop.get_icons_path(), "File0031.png"), 'command': lambda *args: self.validateConnected(self.queryServerStatus, args)},
                     {'label': "Workspace",                  'divider': True},
-                    {'label': "Create Workspace",           'image': os.path.join(interop.getIconPath(), "File0238.png"),    'command': lambda *args: self.validateConnected(self.createWorkspace, args)},
-                    {'label': "Set Current Workspace",      'image': os.path.join(interop.getIconPath(), "File0044.png"),    'command': lambda *args: self.validateConnected(self.setCurrentWorkspace, args)},
+                    {'label': "Create Workspace",           'image': os.path.join(interop.get_icons_path(), "File0238.png"), 'command': lambda *args: self.validateConnected(self.createWorkspace, args)},
+                    {'label': "Set Current Workspace",      'image': os.path.join(interop.get_icons_path(), "File0044.png"), 'command': lambda *args: self.validateConnected(self.setCurrentWorkspace, args)},
                     {'label': "Debug",                      'divider': True},
-                    {'label': "Delete all pending changes", 'image': os.path.join(interop.getIconPath(), "File0280.png"),    'command': lambda *args: self.validateConnected(self.deletePending, args)}
+                    {'label': "Delete all pending changes", 'image': os.path.join(interop.get_icons_path(), "File0280.png"), 'command': lambda *args: self.validateConnected(self.deletePending, args)}
                 ]
             },
-            # {'label': "Connect to server",          'image': os.path.join(interop.getIconPath(), "File0077.png"),    'command': self.connectToServer},
+            # {'label': "Connect to server",          'image': os.path.join(interop.get_icons_path(), "File0077.png"),    'command': self.connectToServer},
         ]
 
-        self.menu = interop.createMenu(menuEntries)
+        self.menu = interop.create_menu(menuEntries)
 
     def removeMenu(self):
         interop.removeMenu(self.menu)
@@ -139,7 +139,7 @@ class MainShelf:
             return
 
         if not shotName[0]:
-            utils.p4Logger().warning("Empty shot name")
+            utils.logger().warning("Empty shot name")
             return
 
         shotNumDialog = QtWidgets.QInputDialog
@@ -150,19 +150,19 @@ class MainShelf:
             return
 
         if not shotNum[0]:
-            utils.p4Logger().warning("Empty shot number")
+            utils.logger().warning("Empty shot number")
             return
 
         shotNumberInt = -1
         try:
             shotNumberInt = int(shotNum[0])
         except ValueError as e:
-            utils.p4Logger().warning(e)
+            utils.logger().warning(e)
             return
 
-        utils.p4Logger().info("Creating folder structure for shot {0}/{1} in {2}".format(
+        utils.logger().info("Creating folder structure for shot {0}/{1} in {2}".format(
             shotName[0], shotNumberInt, self.p4.cwd))
-        dir = utils.createShotFolders(self.p4.cwd, shotName[0], shotNumberInt)
+        dir = utils.create_shot_folders(self.p4.cwd, shotName[0], shotNumberInt)
         self.run_checkoutFolder(None, dir)
 
     def createAsset(self, *args):
@@ -174,12 +174,12 @@ class MainShelf:
             return
 
         if not assetName[0]:
-            utils.p4Logger().warning("Empty asset name")
+            utils.logger().warning("Empty asset name")
             return
 
-        utils.p4Logger().info("Creating folder structure for asset {0} in {1}".format(
+        utils.logger().info("Creating folder structure for asset {0} in {1}".format(
             assetName[0], self.p4.cwd))
-        dir = utils.createAssetFolders(self.p4.cwd, assetName[0])
+        dir = utils.create_asset_folders(self.p4.cwd, assetName[0])
         self.run_checkoutFolder(None, dir)
 
     def connectToServer(self, *args):
@@ -197,7 +197,7 @@ class MainShelf:
                 root, client = os.path.split(str(workspacePath))
                 self.p4.client = client
 
-                utils.p4Logger().info(
+                utils.logger().info(
                     "Setting current client to {0}".format(client))
                 # REALLY make sure we save the P4CLIENT variable
                 if platform.system() == "Linux" or platform.system() == "Darwin":
@@ -249,7 +249,7 @@ class MainShelf:
         fileDialog = QtWidgets.QFileDialog(interop.main_parent_window(), title, str(self.p4.cwd))
 
         def onEnter(*args):
-            if not utils.isPathInClientRoot(self.p4, args[0]):
+            if not utils.is_path_in_client_root(self.p4, args[0]):
                 fileDialog.setDirectory(self.p4.cwd)
 
         def onComplete(*args):
@@ -262,15 +262,15 @@ class MainShelf:
             # Only add files if we didn't cancel
             if args[0] == 1:
                 for file in fileDialog.selectedFiles():
-                    if utils.isPathInClientRoot(self.p4, file):
+                    if utils.is_path_in_client_root(self.p4, file):
                         try:
-                            utils.p4Logger().info(p4command(p4args, file))
+                            utils.logger().info(p4command(p4args, file))
                             selectedFiles.append(file)
                         except P4Exception as e:
-                            utils.p4Logger().warning(e)
+                            utils.logger().warning(e)
                             error = e
                     else:
-                        utils.p4Logger().warning("{0} is not in client root.".format(file))
+                        utils.logger().warning("{0} is not in client root.".format(file))
 
             fileDialog.deleteLater()
             if finishCallback:
@@ -288,7 +288,7 @@ class MainShelf:
         fileDialog = QtWidgets.QFileDialog(interop.main_parent_window(), title, str(self.p4.cwd))
 
         def onEnter(*args):
-            if not utils.isPathInClientRoot(self.p4, args[0]):
+            if not utils.is_path_in_client_root(self.p4, args[0]):
                 fileDialog.setDirectory(self.p4.cwd)
 
         def onComplete(*args):
@@ -301,15 +301,15 @@ class MainShelf:
             # Only add files if we didn't cancel
             if args[0] == 1:
                 for file in fileDialog.selectedFiles():
-                    if utils.isPathInClientRoot(self.p4, file):
+                    if utils.is_path_in_client_root(self.p4, file):
                         try:
-                            utils.p4Logger().info(p4command(p4args, file))
+                            utils.logger().info(p4command(p4args, file))
                             selectedFiles.append(file)
                         except P4Exception as e:
-                            utils.p4Logger().warning(e)
+                            utils.logger().warning(e)
                             error = e
                     else:
-                        utils.p4Logger().warning("{0} is not in client root.".format(file))
+                        utils.logger().warning("{0} is not in client root.".format(file))
 
             fileDialog.deleteLater()
             if finishCallback:
@@ -323,8 +323,8 @@ class MainShelf:
     def checkoutFile(self, *args):
         def openFirstFile(selected, error):
             if not error:
-                if len(selected) == 1 and utils.queryFileExtension(selected[0], interop.getSceneFiles()):
-                    if not interop.getCurrentSceneFile() == selected[0]:
+                if len(selected) == 1 and utils.query_extension(selected[0], interop.get_scene_files()):
+                    if not interop.get_current_scene_file() == selected[0]:
                         result = QtWidgets.QMessageBox.question(
                                     interop.main_parent_window(),
                                     "Open Scene?",
@@ -332,7 +332,7 @@ class MainShelf:
                                     QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
 
                         if result == QtWidgets.QMessageBox.StandardButton.Yes:
-                            interop.openScene(selected[0])
+                            interop.open_scene(selected[0])
 
         self.__processClientFile("Checkout file(s)", openFirstFile, None, self.run_checkoutFile)
 
@@ -342,17 +342,17 @@ class MainShelf:
     def run_checkoutFolder(self, *args):
         allFiles = []
         for folder in args[1:]:
-            allFiles += utils.queryFilesInDirectory(folder)
+            allFiles += utils.query_dir(folder)
 
         self.run_checkoutFile(None, *allFiles)
 
     def deletePending(self, *args):
-        changes = utils.queryChangelists(self.p4, "pending")
-        utils.forceChangelistDelete(self.p4, changes)
+        changes = utils.query_changelists(self.p4, "pending")
+        utils.force_changelist_delete(self.p4, changes)
 
     def run_checkoutFile(self, *args):
         for file in args[1:]:
-            utils.p4Logger().info("Processing {0}...".format(file))
+            utils.logger().info("Processing {0}...".format(file))
             result = None
             try:
                 # @ToDO set this up to use p4.at_exception_level
@@ -365,17 +365,17 @@ class MainShelf:
                     if 'otherLock' in result[0]:
                         raise P4Exception("[Warning]: {0} already locked by {1}\"".format(file, result[0]['otherLock'][0]))
                     else:
-                        utils.p4Logger().info(self.p4.run_edit(file))
-                        utils.p4Logger().info(self.p4.run_lock(file))
+                        utils.logger().info(self.p4.run_edit(file))
+                        utils.logger().info(self.p4.run_lock(file))
                 else:
-                    utils.p4Logger().info(self.p4.run_add(file))
-                    utils.p4Logger().info(self.p4.run_lock(file))
+                    utils.logger().info(self.p4.run_add(file))
+                    utils.logger().info(self.p4.run_lock(file))
             except P4Exception as e:
                 displayErrorUI(e)
 
     def deleteFile(self, *args):
         self.__processClientFile(
-            "Delete file(s)", None, lambda x: utils.addReadOnlyBit(x), self.p4.run_delete)
+            "Delete file(s)", None, lambda x: utils.add_read_only_bit(x), self.p4.run_delete)
 
     def revertFile(self, *args):
         self.__processClientFile(
@@ -398,9 +398,9 @@ class MainShelf:
 
     def querySceneStatus(self, *args):
         try:
-            scene = interop.getCurrentSceneFile()
+            scene = interop.get_current_scene_file()
             if not scene:
-                utils.p4Logger().warning("Current scene file isn't saved.")
+                utils.logger().warning("Current scene file isn't saved.")
                 return
 
             with self.p4.at_exception_level(P4.RAISE_ERRORS):
@@ -435,7 +435,7 @@ class MainShelf:
             self.revisionUi.show()
         except:
             self.revisionUi.deleteLater()
-            utils.p4Logger().error( traceback.format_exc() )
+            utils.logger().error(traceback.format_exc())
 
     def queryOpened(self, *args):
         try:
@@ -452,7 +452,7 @@ class MainShelf:
             self.openedUi.show()
         except:
             self.openedUi.deleteLater()
-            utils.p4Logger().error( traceback.format_exc() )
+            utils.logger().error(traceback.format_exc())
 
     def submitChange(self, *args):
         try:
@@ -488,13 +488,13 @@ class MainShelf:
             self.submitUI.show()
         except:
             self.submitUI.deleteLater()
-            utils.p4Logger().error( traceback.format_exc() )
+            utils.logger().error(traceback.format_exc())
 
     def syncFile(self, *args):
         try:
-            self.p4.run_sync("-f", interop.getCurrentSceneFile())
-            utils.p4Logger().info("Got latest revision for {0}".format(
-                interop.getCurrentSceneFile()))
+            self.p4.run_sync("-f", interop.get_current_scene_file())
+            utils.logger().info("Got latest revision for {0}".format(
+                interop.get_current_scene_file()))
         except P4Exception as e:
             displayErrorUI(e)
 
@@ -510,19 +510,19 @@ class MainShelf:
         # progress = SubmitProgressUI(len(files))
         # progress.create("Submit Progress")
 
-        # callback = TestOutputAndProgress(progress)
+        # callback = TestOutputProgress(progress)
 
         # progress.show()
 
         try:
             self.p4.run_sync("-f", "...")
-            utils.p4Logger().info("Got latest revisions for client")
+            utils.logger().info("Got latest revisions for client")
         except P4Exception as e:
             displayErrorUI(e)
 
     def syncAllChanged(self, *args):
         try:
             self.p4.run_sync("...")
-            utils.p4Logger().info("Got latest revisions for client")
+            utils.logger().info("Got latest revisions for client")
         except P4Exception as e:
             displayErrorUI(e)

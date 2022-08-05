@@ -11,13 +11,13 @@ import pyp4qt.globals
 from pyp4qt import utils
 from pyp4qt.version import __version__
 from pyp4qt.adapter import Adapter
-from pyp4qt.callbacks import BaseCallbacks
+from pyp4qt.callbacks import Callbacks
 from PySide2 import QtCore, QtGui, QtWidgets
 
 
 class KatanaAdapter(Adapter):
     @staticmethod
-    def setupEnvironment():
+    def setup_env():
         pass
 
     @staticmethod
@@ -26,7 +26,7 @@ class KatanaAdapter(Adapter):
         # return UI4.App.MainMenu.MainMenu.instance()
   
     @staticmethod
-    def getSettingsPath():
+    def get_settings_path():
         user_dir = os.getenv("KATANA_USER_RESOURCE_DIRECTORY")
         if user_dir:
             return user_dir
@@ -45,30 +45,30 @@ class KatanaAdapter(Adapter):
             return os.path.expanduser('~/.katana')
 
     @staticmethod
-    def getIconPath():
-        return os.path.join(KatanaAdapter.getSettingsPath(), "P4Katana", "perforce", "icons")
+    def get_icons_path():
+        return os.path.join(KatanaAdapter.get_settings_path(), "P4Katana", "perforce", "icons")
     
     @staticmethod
-    def getSceneFiles():
+    def get_scene_files():
         return ['.katana']
     
     @staticmethod
-    def getTempPath():
+    def get_temp_path():
         import tempfile
         return tempfile.gettempdir()
 
     @staticmethod
-    def getCurrentSceneFile():
+    def get_current_scene_file():
         pass
 
 
     @staticmethod
-    def openScene(filePath):
+    def open_scene(filePath):
         KatanaFile.Load(filePath)
 
 
     @staticmethod
-    def closeWindow(ui):
+    def close_window(ui):
         pass
 
 
@@ -82,7 +82,7 @@ class KatanaAdapter(Adapter):
     def sanitizeIconPath(self, iconPath):
         return os.path.basename(iconPath)
 
-    def initializeMenu(self, entries):
+    def init_menu(self, entries):
         mainMenu = UI4.App.MainWindow.CurrentMainWindow().findChild(UI4.App.MainMenu.MainMenu)
 
         # Find help menu
@@ -92,23 +92,23 @@ class KatanaAdapter(Adapter):
         self.menu = mainMenu.addMenu('Perforce')
         mainMenu.insertMenu(helpMenu, self.menu)
 
-    def addMenuDivider(self, label):
+    def add_menu_divider(self, label):
         self.menu.addSeparator()
        
-    def addMenuLabel(self, label):
+    def add_menu_label(self, label):
         self.menu.addAction(label)
 
-    def addMenuSubmenu(self, label, icon, entries):
+    def add_menu_submenu(self, label, icon, entries):
         # Save our current menu
         parent = self.menu
         self.menu = parent.addMenu(QtGui.QIcon(icon), label)
 
         # Fill up the submenu
-        self.fillMenu(entries)
+        self.fill_menu(entries)
 
         # Reset our current menu
         self.menu = parent
 
 
-    def addMenuCommand(self, label, icon, command):
+    def add_menu_command(self, label, icon, command):
         self.menu.addAction(QtGui.QIcon(icon), label, command)

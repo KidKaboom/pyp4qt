@@ -7,7 +7,7 @@ def displayErrorUI(e):
     error_ui = QtWidgets.QMessageBox()
     error_ui.setWindowFlags(QtCore.Qt.WA_DeleteOnClose)
 
-    eMsg, type = pyp4qt.utils.parsePerforceError(e)
+    eMsg, type = pyp4qt.utils.parse_perforce_error(e)
 
     if type == "warning":
         error_ui.warning(interop.main_parent_window(), "Perforce Warning", eMsg)

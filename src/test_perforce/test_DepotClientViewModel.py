@@ -2,7 +2,7 @@ import unittest
 import logging
 
 from pyp4qt.apps import interop
-from pyp4qt.qt import initMenu
+from pyp4qt.utils import initMenu
 
 from test_perforce import TestingEnvironment
 from pyp4qt.qt import DepotClientViewModel

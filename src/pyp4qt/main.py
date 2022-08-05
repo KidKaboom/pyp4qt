@@ -7,7 +7,7 @@ from pyp4qt import utils
 from test_perforce import TestingEnvironment, setupPythonEnvironment
 setupPythonEnvironment()
 
-from pyp4qt.utils import p4Logger
+from pyp4qt.utils import logger
 from pyp4qt.apps import interop
 from pyp4qt.qt import PerforceMenu
 
@@ -20,7 +20,7 @@ def displayMenuItem(ui, args):
             "checkout.folder":                  ui.checkoutFolder,
             "mark.delete":                      ui.deleteFile,
             "show.changelist":                  ui.queryOpened,
-            "submit.change":                    utils.submitChange,
+            "submit.change":                    utils.submit_change,
             "sync.all":                         ui.syncAllChanged,
             "sync.all.force":                   ui.syncAll,
             "depot.history":                    ui.fileRevisions,
@@ -43,18 +43,18 @@ def displayMenuItem(ui, args):
             except Exception as e:
                 raise
         else:
-            p4Logger().warning('%s isn\'t a key in the menu item dict' % arg)
+            logger().warning('%s isn\'t a key in the menu item dict' % arg)
 
 def setup(args):
     cwd = os.path.realpath(os.path.join(os.path.dirname(__file__), '../..'))
     os.environ["P4CONFIG"] = os.path.join(cwd, '.p4config')
 
-    window, app = interop.setupEnvironment()
+    window, app = interop.setup_env()
     logging.basicConfig(level=logging.DEBUG)
 
     p4 = TestingEnvironment()
 
-    p4Logger().debug( 'Default cwd: %s' % p4.cwd )
+    logger().debug('Default cwd: %s' % p4.cwd)
 
     ui = PerforceMenu.MainShelf(p4)
 

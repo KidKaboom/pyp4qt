@@ -31,9 +31,9 @@ class BaseInterop(object):
 
         # We need to import interop so the appropriate class is used while creating the menus
         interop = interop()
-        interop.initializeMenu(entries)
-        interop.fillMenu(entries)
-        interop.addMenuLabel("Version {0}".format(__version__))
+        interop.init_menu(entries)
+        interop.fill_menu(entries)
+        interop.add_menu_label("Version {0}".format(__version__))
 
     @staticmethod
     def getSettingsPath():

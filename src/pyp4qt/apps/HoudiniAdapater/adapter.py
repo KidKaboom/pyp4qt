@@ -9,13 +9,13 @@ import pyp4qt.globals
 from pyp4qt import utils
 from pyp4qt.version import __version__
 from pyp4qt.adapter import Adapter
-from pyp4qt.callbacks import BaseCallbacks
+from pyp4qt.callbacks import Callbacks
 from PySide2 import QtCore, QtGui, QtWidgets
 
 
 class HoudiniAdapter(Adapter):
     @staticmethod
-    def setupEnvironment():
+    def setup_env():
         pass
         # class TestWidget(QtWidgets.QWidget):
         #     def keyPressEvent(self, e):
@@ -32,33 +32,33 @@ class HoudiniAdapter(Adapter):
         return hou.ui.mainQtWindow()
   
     @staticmethod
-    def getSettingsPath():
+    def get_settings_path():
         return os.getenv("HOUDINI_USER_PREF_DIR")
 
     @staticmethod
-    def getIconPath():
-        return os.path.join(HoudiniAdapter.getSettingsPath(), "scripts", "P4Houdini" "perforce", "icons")
+    def get_icons_path():
+        return os.path.join(HoudiniAdapter.get_settings_path(), "scripts", "P4Houdini" "perforce", "icons")
     
     @staticmethod
-    def getSceneFiles():
+    def get_scene_files():
         return ['.hip', '.hipnc']
     
     @staticmethod
-    def getTempPath():
+    def get_temp_path():
         return os.environ["HOUDINI_TEMP_DIR"]
 
     @staticmethod
-    def getCurrentSceneFile():
+    def get_current_scene_file():
         return hou.hipFile.path()
 
 
     @staticmethod
-    def openScene(filePath):
+    def open_scene(filePath):
         hou.hipFile.load(filePath)
 
 
     @staticmethod
-    def closeWindow(ui):
+    def close_window(ui):
         pass
 
 
@@ -67,32 +67,32 @@ class HoudiniAdapter(Adapter):
         pass
 
 
-    def initializeMenu(self, entries):
+    def init_menu(self, entries):
         self.menu = QtWidgets.QMenu( hou.ui.mainQtWindow() )
         self.menu.setTitle('Perforce')
 
-    def addMenuDivider(self, label):
+    def add_menu_divider(self, label):
         pass
         # self.menu.addSeparator()
        
-    def addMenuLabel(self, label):
+    def add_menu_label(self, label):
         pass
         # tmp = self.menu.addCommand(label, lambda: None)
         # tmp.setEnabled(False)
 
-    def addMenuSubmenu(self, label, iconPath, entries):
+    def add_menu_submenu(self, label, iconPath, entries):
         pass
         # # Save our current menu
         # parent = self.menu
         # self.menu = parent.addMenu(label, icon=self.sanitizeIconPath(iconPath))
 
         # # Fill up the submenu
-        # self.fillMenu(entries)
+        # self.fill_menu(entries)
 
         # # Reset our current menu
         # self.menu = parent
 
 
-    def addMenuCommand(self, label, iconPath, command):
+    def add_menu_command(self, label, iconPath, command):
         pass
         # self.menu.addCommand(label, command, icon=self.sanitizeIconPath(iconPath))

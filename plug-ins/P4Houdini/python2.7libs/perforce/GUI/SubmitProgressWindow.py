@@ -31,7 +31,7 @@ class SubmitProgressUI(QtWidgets.QDialog):
         self.currentFile += 1
         self.overallProgressBar.setValue(self.currentFile)
 
-        Utils.p4Logger().debug('%s, %s' % (self.totalFiles, self.currentFile))
+        Utils.logger().debug('%s, %s' % (self.totalFiles, self.currentFile))
 
         if self.currentFile >= self.totalFiles:
             self.setComplete(True)
@@ -47,7 +47,7 @@ class SubmitProgressUI(QtWidgets.QDialog):
         self.quitBtn.setText("Quit")
 
     def create(self, title, files=[]):
-        path = interop.getIconPath() + "p4.png"
+        path = interop.get_icons_path() + "p4.png"
         icon = QtGui.QIcon(path)
 
         self.setWindowTitle(title)

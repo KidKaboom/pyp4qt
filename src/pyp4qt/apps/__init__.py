@@ -32,6 +32,7 @@ modules = filter(lambda x: not x.endswith('.pyc'), modules)
 
 # Get only the relative directory paths
 modules = [os.path.basename(x) for x in modules]
+interop = None
 
 for module in modules:
     module_name = "pyp4qt.apps.{}".format(module)
@@ -50,5 +51,3 @@ for module in modules:
     submodule = loadInteropModule("{}.adapter".format(module_name), os.path.join(cwd, module))
     interop = getattr(submodule, module)
     break
-else:
-    interop = None

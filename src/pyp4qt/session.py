@@ -136,7 +136,7 @@ class Session(P4):
         Returns:
             str
         """
-        return self.info().get("clientRoot", str())
+        return self.info().get("client_root", str())
 
     def depot_dirs(self, root=str()):
         """ Returns a list of DepotDirectory subdirectories from a root path.

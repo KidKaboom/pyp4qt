@@ -32,10 +32,10 @@ for module in modules:
         if not mod.validate():
             continue
     except AttributeError as e:
-        Utils.p4Logger().debug('%s has no validate() method, skipping' % name)
+        Utils.logger().debug('%s has no validate() method, skipping' % name)
         continue
 
-    Utils.p4Logger().info("Configuring for %s" % name)
+    Utils.logger().info("Configuring for %s" % name)
     mod.setup()
     submodule = getattr(mod, 'interop')
     interop = getattr(submodule, name)
@@ -51,19 +51,19 @@ else:
 # # Import app specific utilities, maya opens scenes differently than nuke etc
 # # Are we in maya or nuke?
 # if re.match("maya", os.path.basename(sys.executable), re.I):
-#     Utils.p4Logger().info("Configuring for Maya")
-#     interop = Utils.importClass('perforce.interop.maya', 'maya')
+#     Utils.logger().info("Configuring for Maya")
+#     interop = Utils.import_class('perforce.interop.maya', 'maya')
 
 # elif re.match("nuke", os.path.basename(sys.executable), re.I):
-#     Utils.p4Logger().info("Configuring for Nuke")
-#     interop = Utils.importClass('perforce.interop.nuke', 'nuke')
+#     Utils.logger().info("Configuring for Nuke")
+#     interop = Utils.import_class('perforce.interop.nuke', 'nuke')
 
 # elif in_unittest:
-#     Utils.p4Logger().info("Configuring for testing")
-#     interop = Utils.importClass('perforce.interop.standalone', 'standalone')
+#     Utils.logger().info("Configuring for testing")
+#     interop = Utils.import_class('perforce.interop.standalone', 'standalone')
 
 # else:
-#     Utils.p4Logger().warning("Couldn't find app configuration")
+#     Utils.logger().warning("Couldn't find app configuration")
 #     raise ImportError(
 #         "No supported applications found that this plugin can interface with")
 

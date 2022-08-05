@@ -23,7 +23,7 @@ import maya.OpenMaya as api
 
 from pyp4qt.version import __version__
 from pyp4qt.adapter import Adapter
-from pyp4qt.callbacks import BaseCallbacks
+from pyp4qt.callbacks import Callbacks
 from pyp4qt.apps.MayaAdapter import utils
 from pyp4qt import globals
 from PySide2 import QtCore, QtGui, QtWidgets
@@ -33,7 +33,7 @@ REFERENCE_CALLBACK = None
 SAVE_CALLBACK = None
 
 
-class MayaCallbacks(BaseCallbacks):
+class MayaCallbacks(Callbacks):
     @staticmethod
     def validateSubmit():
         print("Validating submission")
@@ -113,7 +113,7 @@ class MayaCallbacks(BaseCallbacks):
 
 class MayaAdapter(Adapter):
     @staticmethod
-    def setupEnvironment():
+    def setup_env():
         import maya.standalone
         maya.standalone.initialize("Python")
 
@@ -136,39 +136,39 @@ class MayaAdapter(Adapter):
             return shiboken.wrapInstance(int(ptr), QtWidgets.QWidget)
 
     @staticmethod
-    def getSettingsPath():
+    def get_settings_path():
         return os.environ['MAYA_APP_DIR']
 
     @staticmethod
-    def getIconPath():
+    def get_icons_path():
         # return os.environ['MAYA_APP_DIR'] + "/scripts/Perforce/icons/"
         return globals.ICONS_DIR
 
     @staticmethod
-    def getSceneFiles():
+    def get_scene_files():
         return ['.ma', '.mb']
 
     @staticmethod
-    def getTempPath():
+    def get_temp_path():
         return os.environ['TMPDIR']
 
     @staticmethod
-    def getCurrentSceneFile():
+    def get_current_scene_file():
         return cmds.file(q=True, sceneName=True)
 
     @staticmethod
-    def openScene(filePath):
+    def open_scene(filePath):
         cmds.file(filePath, f=True, o=True)
 
     @staticmethod
-    def closeWindow(ui):
+    def close_window(ui):
         cmds.deleteUI(ui)
 
     @staticmethod
     def refresh():
         cmds.refresh()
 
-    def initializeMenu(self, entries):
+    def init_menu(self, entries):
         try:
             # gMainWindow = MayaAdapter.main_parent_window()
             gMainWindow = maya.mel.eval('$temp1=$gMainWindow')
@@ -185,28 +185,28 @@ class MayaAdapter(Adapter):
             print('Maya error while trying to create menu:', )
             print(e)
 
-    def addMenuDivider(self, menu, label):
+    def add_menu_divider(self, menu, label):
         try:
             cmds.menuItem(divider=True, label=label)
         except RuntimeError as e:
             print('Maya error while trying to create divider:', )
             print(e)
 
-    def addMenuLabel(self, menu, label):
+    def add_menu_label(self, menu, label):
         try:
             cmds.menuItem(label=label, en=False)
         except RuntimeError as e:
             print('Maya error while trying to add menu entry:', )
             print(e)
 
-    def addMenuSubmenu(self, menu, label, icon, entries):
+    def add_menu_submenu(self, menu, label, icon, entries):
         try:
             cmds.menuItem(subMenu=True, tearOff=False, label=label, image=icon)
         except RuntimeError as e:
             print('Maya error while trying to create submenu:', )
             print(e)
 
-        self.fillMenu(entries)
+        self.fill_menu(entries)
 
         try:
             cmds.setParent('..', menu=True)
@@ -214,7 +214,7 @@ class MayaAdapter(Adapter):
             print('Maya error while trying to change menu parent:', )
             print(e)
 
-    def addMenuCommand(self, menu, label, icon, command):
+    def add_menu_command(self, menu, label, icon, command):
         try:
             cmds.menuItem(label=label, image=icon, command=command)
         except RuntimeError as e:

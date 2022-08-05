@@ -22,10 +22,10 @@ class TestOutputAndProgress(Progress, OutputHandler):
     def outputStat(self, stat):
         if 'totalFileCount' in stat:
             self.totalFileCount = int(stat['totalFileCount'])
-            Utils.p4Logger().debug("TOTAL FILE COUNT: %s" % (self.totalFileCount))
+            Utils.logger().debug("TOTAL FILE COUNT: %s" % (self.totalFileCount))
         if 'totalFileSize' in stat:
             self.totalFileSize = int(stat['totalFileSize'])
-            Utils.p4Logger().debug("TOTAL FILE SIZE: %s" % (self.totalFileSize))
+            Utils.logger().debug("TOTAL FILE SIZE: %s" % (self.totalFileSize))
         if self.shouldCancel:
             return OutputHandler.REPORT | OutputHandler.CANCEL
         else:
@@ -33,7 +33,7 @@ class TestOutputAndProgress(Progress, OutputHandler):
 
     def outputInfo(self, info):
         interop.refresh()
-        Utils.p4Logger().debug("INFO: %s" % (info))
+        Utils.logger().debug("INFO: %s" % (info))
         if self.shouldCancel:
             return OutputHandler.REPORT | OutputHandler.CANCEL
         else:
@@ -41,7 +41,7 @@ class TestOutputAndProgress(Progress, OutputHandler):
 
     def outputMessage(self, msg):
         interop.refresh()
-        Utils.p4Logger().debug("Msg: %s" % (msg))
+        Utils.logger().debug("Msg: %s" % (msg))
 
         if self.shouldCancel:
             return OutputHandler.REPORT | OutputHandler.CANCEL
@@ -50,28 +50,28 @@ class TestOutputAndProgress(Progress, OutputHandler):
 
     def init(self, type):
         interop.refresh()
-        Utils.p4Logger().debug("Begin: %s" % (type))
+        Utils.logger().debug("Begin: %s" % (type))
         self.type = type
         self.ui.incrementCurrent()
 
     def setDescription(self, description, unit):
         interop.refresh()
-        Utils.p4Logger().debug("Desc: %s, %s" % (description, unit))
+        Utils.logger().debug("Desc: %s, %s" % (description, unit))
         pass
 
     def setTotal(self, total):
         interop.refresh()
-        Utils.p4Logger().debug("Total: %s" % (total))
+        Utils.logger().debug("Total: %s" % (total))
         self.ui.setMaximum(total)
         pass
 
     def update(self, position):
         interop.refresh()
-        Utils.p4Logger().debug("Update: %s" % (position))
+        Utils.logger().debug("Update: %s" % (position))
         self.ui.setValue(position)
         self.position = position
 
     def done(self, fail):
         interop.refresh()
-        Utils.p4Logger().debug("Failed: %s" % (fail))
+        Utils.logger().debug("Failed: %s" % (fail))
         self.fail = fail

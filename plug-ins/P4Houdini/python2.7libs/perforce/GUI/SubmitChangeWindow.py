@@ -18,7 +18,7 @@ class SubmitChangeUi(QtWidgets.QDialog):
     def create(self, p4, files=[]):
         self.p4 = p4
 
-        path = interop.getIconPath() + "p4.png"
+        path = interop.get_icons_path() + "p4.png"
         icon = QtGui.QIcon(path)
 
         self.setWindowTitle("Submit Change")
@@ -87,11 +87,11 @@ class SubmitChangeUi(QtWidgets.QDialog):
 
             path = ""
             if(pendingAction == "edit"):
-                path = os.path.join(interop.getIconPath(), "File0440.png")
+                path = os.path.join(interop.get_icons_path(), "File0440.png")
             elif(pendingAction == "add"):
-                path = os.path.join(interop.getIconPath(), "File0242.png")
+                path = os.path.join(interop.get_icons_path(), "File0242.png")
             elif(pendingAction == "delete"):
-                path = os.path.join(interop.getIconPath(), "File0253.png")
+                path = os.path.join(interop.get_icons_path(), "File0253.png")
 
             widget = QtWidgets.QWidget()
 
@@ -188,7 +188,7 @@ class SubmitChangeUi(QtWidgets.QDialog):
 
 
         try:
-            pyp4qt.utils.submitChange(self.p4, files, str(
+            pyp4qt.utils.submit_change(self.p4, files, str(
                 self.descriptionWidget.toPlainText()), callback, keepCheckedOut)
             if not keepCheckedOut:
                 clientFiles = []
@@ -201,7 +201,7 @@ class SubmitChangeUi(QtWidgets.QDialog):
 
                 # Bug with windows, doesn't make files writable on submit for
                 # some reason
-                Utils.removeReadOnlyBit(clientFiles)
+                Utils.remove_read_only_bit(clientFiles)
             self.close()
         except P4Exception as e:
             self.p4.progress = None

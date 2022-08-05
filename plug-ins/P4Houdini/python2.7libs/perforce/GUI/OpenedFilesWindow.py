@@ -14,7 +14,7 @@ class OpenedFilesUI(QtWidgets.QDialog):
     def create(self, p4, files=[]):
         self.p4 = p4
 
-        path = interop.getIconPath()
+        path = interop.get_icons_path()
         icon = QtGui.QIcon(path)
 
         self.setWindowTitle("Changelist : Opened Files")
@@ -46,16 +46,16 @@ class OpenedFilesUI(QtWidgets.QDialog):
         self.openSelectedBtn = QtWidgets.QPushButton("Open")
         self.openSelectedBtn.setEnabled(False)
         self.openSelectedBtn.setIcon(QtGui.QIcon(
-            os.path.join(interop.getIconPath(), "File0228.png")))
+            os.path.join(interop.get_icons_path(), "File0228.png")))
 
         self.revertFileBtn = QtWidgets.QPushButton("Remove from changelist")
         self.revertFileBtn.setEnabled(False)
         self.revertFileBtn.setIcon(QtGui.QIcon(
-            os.path.join(interop.getIconPath(), "File0308.png")))
+            os.path.join(interop.get_icons_path(), "File0308.png")))
 
         self.refreshBtn = QtWidgets.QPushButton("Refresh")
         self.refreshBtn.setIcon(QtGui.QIcon(
-            os.path.join(interop.getIconPath(), "File0175.png")))
+            os.path.join(interop.get_icons_path(), "File0175.png")))
 
         self.updateTable()
 
@@ -102,7 +102,7 @@ class OpenedFilesUI(QtWidgets.QDialog):
         depotFile = os.path.join(filePath, fileName)
 
         try:
-            Utils.p4Logger().info(self.p4.run_revert("-k", depotFile))
+            Utils.logger().info(self.p4.run_revert("-k", depotFile))
         except P4Exception as e:
             displayErrorUI(e)
 
@@ -132,8 +132,8 @@ class OpenedFilesUI(QtWidgets.QDialog):
             result = self.p4.run_fstat(depotFile)[0]
             clientFile = result['clientFile']
 
-            if Utils.queryFileExtension(depotFile, interop.getSceneFiles()):
-                interop.openScene(clientFile)
+            if Utils.query_extension(depotFile, interop.get_scene_files()):
+                interop.open_scene(clientFile)
             else:
                 Utils.open_file(clientFile)
         except P4Exception as e:
@@ -185,11 +185,11 @@ class OpenedFilesUI(QtWidgets.QDialog):
 
             path = ""
             if(pendingAction == "edit"):
-                path = os.path.join(interop.getIconPath(), "File0440.png")
+                path = os.path.join(interop.get_icons_path(), "File0440.png")
             elif(pendingAction == "add"):
-                path = os.path.join(interop.getIconPath(), "File0242.png")
+                path = os.path.join(interop.get_icons_path(), "File0242.png")
             elif(pendingAction == "delete"):
-                path = os.path.join(interop.getIconPath(), "File0253.png")
+                path = os.path.join(interop.get_icons_path(), "File0253.png")
 
             widget = QtWidgets.QWidget()
 
