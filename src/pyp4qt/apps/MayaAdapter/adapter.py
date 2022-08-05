@@ -22,7 +22,8 @@ except ImportError:
 import maya.OpenMaya as api
 
 from pyp4qt.version import __version__
-from pyp4qt.adapter import Adapter, BaseCallbacks
+from pyp4qt.adapter import Adapter
+from pyp4qt.callbacks import BaseCallbacks
 from pyp4qt.apps.MayaAdapter import utils
 from pyp4qt import globals
 from PySide2 import QtCore, QtGui, QtWidgets

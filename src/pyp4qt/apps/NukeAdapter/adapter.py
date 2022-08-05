@@ -8,7 +8,8 @@ import nuke
 import pyp4qt.globals
 from pyp4qt import utils
 from pyp4qt.version import __version__
-from pyp4qt.adapter import Adapter, BaseCallbacks
+from pyp4qt.adapter import Adapter
+from pyp4qt.callbacks import BaseCallbacks
 from PySide2 import QtCore, QtGui, QtWidgets
 
 

@@ -2,21 +2,6 @@ import tempfile
 from pyp4qt.version import __version__
 
 
-class BaseCallbacks(object):
-
-    @staticmethod
-    def validateSubmit():
-        raise NotImplementedError
-
-    @staticmethod
-    def cleanupCallbacks():
-        raise NotImplementedError
-
-    @staticmethod
-    def initCallbacks():
-        raise NotImplementedError
-
-
 class Adapter(object):
     @staticmethod
     def setupEnvironment():
