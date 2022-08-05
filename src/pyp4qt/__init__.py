@@ -16,7 +16,7 @@ logging.basicConfig(
 )
 
 from pyp4qt.perforce_utils import SetupConnection
-from pyp4qt import ui
+from pyp4qt import qt
 
 # Evil global
 p4 = P4()
@@ -26,9 +26,9 @@ def init():
     # if p4.p4config_file == 'noconfig':
     #     raise RuntimeError("Can't find P4CONFIG, please ensure your Perforce is set correctly. (Look at 'p4 set' and set the P4CONFIG environment variable to the location of your configuration file")
 
-    ui.initMenu(p4)
+    qt.initMenu(p4)
 
 def close():
     p4.disconnect()
 
-    ui.cleanupMenu()
+    qt.cleanupMenu()

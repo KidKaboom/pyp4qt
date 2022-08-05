@@ -7,7 +7,7 @@ from pyp4qt import utils
 from pyp4qt.perforce_utils import CmdsChangelist
 from pyp4qt.apps import interop
 from pyp4qt.perforce_utils.TestOutputAndProgress import TestOutputAndProgress
-from pyp4qt.ui.SubmitProgressWindow import SubmitProgressUI
+from pyp4qt.qt.SubmitProgressWindow import SubmitProgressUI
 
 class SubmitChangeUi(QtWidgets.QDialog):
 

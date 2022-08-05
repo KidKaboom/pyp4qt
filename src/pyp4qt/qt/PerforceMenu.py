@@ -9,13 +9,13 @@ from pyp4qt import utils
 from pyp4qt.perforce_utils import SetupConnection
 from pyp4qt.apps import interop
 from pyp4qt.perforce_utils.TestOutputAndProgress import TestOutputAndProgress
-from pyp4qt.ui.SubmitProgressWindow import SubmitProgressUI
+from pyp4qt.qt.SubmitProgressWindow import SubmitProgressUI
 
-from pyp4qt.ui.LoginWindow import firstTimeLogin
-from pyp4qt.ui.ErrorMessageWindow import displayErrorUI
-from pyp4qt.ui import OpenedFilesWindow
-from pyp4qt.ui import SubmitChangeWindow
-from pyp4qt.ui import FileRevisionWindow
+from pyp4qt.qt.LoginWindow import firstTimeLogin
+from pyp4qt.qt.ErrorMessageWindow import displayErrorUI
+from pyp4qt.qt import OpenedFilesWindow
+from pyp4qt.qt import SubmitChangeWindow
+from pyp4qt.qt import FileRevisionWindow
 
 from PySide2 import QtCore, QtGui, QtWidgets
 

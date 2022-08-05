@@ -1,6 +1,6 @@
 # Project Modules
 from pyp4qt.session import Session
-from pyp4qt.ui.changelist_model import ChangeListModel
+from pyp4qt.qt.changelist_model import ChangeListModel
 
 # Python Modules
 from PySide2.QtCore import Qt

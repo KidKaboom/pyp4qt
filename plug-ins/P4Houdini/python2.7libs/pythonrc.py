@@ -29,7 +29,7 @@ except Exception as e:
 #     self.event_loop = QtCore.QEventLoop()
 
 #   def exec_(self):
-#     hou.ui.addEventLoopCallback(self.processEvents)
+#     hou.qt.addEventLoopCallback(self.processEvents)
 
 #   def processEvents(self):
 #     # There is no easy way to know when the event loop is done. We can't
@@ -39,7 +39,7 @@ except Exception as e:
 #     # instead of closed. Instead, we need to explicitly check if any top
 #     # level widgets are still visible.
 #     if not anyQtWindowsAreOpen():
-#       hou.ui.removeEventLoopCallback(self.processEvents)
+#       hou.qt.removeEventLoopCallback(self.processEvents)
 
 #     self.event_loop.processEvents()
 #     self.application.sendPostedEvents(None, 0)
@@ -64,7 +64,7 @@ except Exception as e:
 #   is open.
 #   """
 #   exec_(application, *args)
-#   hou.ui.waitUntil(lambda: not anyQtWindowsAreOpen())
+#   hou.qt.waitUntil(lambda: not anyQtWindowsAreOpen())
   
 #app = QtWidgets.QApplication.instance()
 #dialog = FontDialog()

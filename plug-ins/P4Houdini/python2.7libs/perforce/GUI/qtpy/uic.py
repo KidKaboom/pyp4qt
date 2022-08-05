@@ -124,7 +124,7 @@ else:
 
         def createWidget(self, class_name, parent=None, name=''):
             """
-            Function that is called for each widget defined in ui file,
+            Function that is called for each widget defined in qt file,
             overridden here to populate baseinstance instead.
             """
 
@@ -161,7 +161,7 @@ else:
 
     def _get_custom_widgets(ui_file):
         """
-        This function is used to parse a ui file and look for the <customwidgets>
+        This function is used to parse a qt file and look for the <customwidgets>
         section, then automatically load all the custom widget classes.
         """
 

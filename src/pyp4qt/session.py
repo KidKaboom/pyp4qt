@@ -1,10 +1,5 @@
-# Project Modules
-
-
-# Python Modules
 import os
 from P4 import P4, P4Exception
-from PySide2.QtCore import QObject
 
 
 class DictStruct:
@@ -394,19 +389,5 @@ class Session(P4):
 if __name__ == "__main__":
     _test = Session()
     _test.connect()
-    # print(_test.info())
-    # print(_test.depot_dirs())
-    # print(_test.depot_files("//iw8-source"))
-    # print(_test.run("files", "//iw8-source/*"))
-    # print(_test.run("dirs", "//iw8-source/*"))
-    # cl = _test.save_change({"Change": "new", "Description": "Test"})
-    # print(cl)
-    # print(_test.run_changes("-s", "pending", "-u", "jtirado"))
-    # print(_test.pending_changelists()[0].desc)
-    # print(_test.create_changelist("Test4"))
-    # _test.edit_changelist(12118125, "Test3")
-    # print(_test.get_changelist(12118125).depotFile)
-    # for x in _test.pending_changelists():
-    #     print(x.change)
     print(_test.get_default_files())
     _test.disconnect()

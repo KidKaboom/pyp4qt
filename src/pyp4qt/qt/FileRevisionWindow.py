@@ -6,8 +6,8 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from pyp4qt import utils
 from pyp4qt.perforce_utils import CmdsChangelist
 from pyp4qt.apps import interop
-from pyp4qt.ui.ErrorMessageWindow import displayErrorUI
-from pyp4qt.ui import DepotClientViewModel
+from pyp4qt.qt.ErrorMessageWindow import displayErrorUI
+from pyp4qt.qt import DepotClientViewModel
 
 class BaseRevisionTab(QtWidgets.QWidget):
     def __init__(self, p4, parent=None):

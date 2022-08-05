@@ -45,7 +45,7 @@ def get_qapp(icon_path=None):
 def test_load_ui():
     """
     Make sure that the patched loadUi function behaves as expected with a
-    simple .ui file.
+    simple .qt file.
     """
     app = get_qapp()
     ui = loadUi(os.path.join(os.path.dirname(__file__), 'test.ui'))
@@ -55,7 +55,7 @@ def test_load_ui():
 
 def test_load_ui_custom_auto(tmpdir):
     """
-    Test that we can load a .ui file with custom widgets without having to
+    Test that we can load a .qt file with custom widgets without having to
     explicitly specify a dictionary of custom widgets, even in the case of
     PySide.
     """

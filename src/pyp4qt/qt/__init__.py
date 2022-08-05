@@ -8,19 +8,19 @@ from distutils.version import StrictVersion
 from P4 import P4, P4Exception, Progress, OutputHandler
 
 import pyp4qt.utils as Utils
-import pyp4qt.ui.PerforceMenu as PerforceMenu
+import pyp4qt.qt.PerforceMenu as PerforceMenu
 from pyp4qt.apps import interop
 
 # try:
-#     AppUtils.closeWindow(ui.perforceMenu)
+#     AppUtils.closeWindow(qt.perforceMenu)
 # except:
-#     ui = None
+#     qt = None
 
 def initMenu(p4):
     global ui
     # try:
-    #     # cmds.deleteUI(ui.perforceMenu)
-    #     AppUtils.closeWindow(ui.perforceMenu)
+    #     # cmds.deleteUI(qt.perforceMenu)
+    #     AppUtils.closeWindow(qt.perforceMenu)
     # except:
     #     pass
 
@@ -33,7 +33,7 @@ def initMenu(p4):
     except ValueError as e:
         Utils.p4Logger().critical(e)
 
-    # mu.executeDeferred('ui.addMenu()')
+    # mu.executeDeferred('qt.addMenu()')
 
 
 def cleanupMenu():
@@ -42,11 +42,11 @@ def cleanupMenu():
     # interop.cleanupCallbacks()
 
     # try:
-    #     # cmds.deleteUI(ui.perforceMenu)
-    #     AppUtils.closeWindow(ui.perforceMenu)
+    #     # cmds.deleteUI(qt.perforceMenu)
+    #     AppUtils.closeWindow(qt.perforceMenu)
     # except Exception as e:
     #     raise e
 
     ui.close()
 
-    #del ui
+    #del qt
