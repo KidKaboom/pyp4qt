@@ -6,7 +6,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 import pyp4qt.utils
 from pyp4qt import utils
 from pyp4qt.apps import interop
-from pyp4qt.test_output_progress import TestOutputProgress
+from pyp4qt.output_progress import OutputProgress
 from pyp4qt.qt.SubmitProgressWindow import SubmitProgressUI
 
 class SubmitChangeUi(QtWidgets.QDialog):
@@ -168,7 +168,7 @@ class SubmitChangeUi(QtWidgets.QDialog):
         progress = SubmitProgressUI(len(files))
         progress.create("Submit Progress")
 
-        callback = TestOutputProgress(progress)
+        callback = OutputProgress(progress)
 
         progress.show()
 

@@ -24,7 +24,7 @@ def initMenu(p4):
     # except:
     #     pass
 
-    # interop.initCallbacks()
+    # interop.init_callbacks()
 
     try:
         ui = PerforceMenu.MainShelf(p4)
@@ -39,7 +39,7 @@ def initMenu(p4):
 def cleanupMenu():
     global ui
 
-    # interop.cleanupCallbacks()
+    # interop.cleanup_callbacks()
 
     # try:
     #     # cmds.deleteUI(qt.perforceMenu)

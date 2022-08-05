@@ -527,7 +527,7 @@ class MainShelf:
         # progress = SubmitProgressUI(len(files))
         # progress.create("Submit Progress")
 
-        # callback = TestOutputProgress(progress)
+        # callback = OutputProgress(progress)
 
         # progress.show()
 

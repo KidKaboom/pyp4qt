@@ -8,7 +8,7 @@ from P4 import P4, P4Exception
 import pyp4qt.utils
 from pyp4qt import utils
 from pyp4qt.apps import interop
-from pyp4qt.test_output_progress import TestOutputProgress
+from pyp4qt.output_progress import OutputProgress
 from pyp4qt.qt.SubmitProgressWindow import SubmitProgressUI
 
 from pyp4qt.qt.LoginWindow import firstTimeLogin
@@ -510,7 +510,7 @@ class MainShelf:
         # progress = SubmitProgressUI(len(files))
         # progress.create("Submit Progress")
 
-        # callback = TestOutputProgress(progress)
+        # callback = OutputProgress(progress)
 
         # progress.show()
 

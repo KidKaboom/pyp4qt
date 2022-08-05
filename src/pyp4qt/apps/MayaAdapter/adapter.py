@@ -35,12 +35,12 @@ SAVE_CALLBACK = None
 
 class MayaCallbacks(Callbacks):
     @staticmethod
-    def validateSubmit():
+    def validate_submit():
         print("Validating submission")
         return 0
 
     @staticmethod
-    def cleanupCallbacks():
+    def cleanup_callbacks():
         if REFERENCE_CALLBACK:
             try:
                 api.MCommandMessage.removeCallback(REFERENCE_CALLBACK)
@@ -54,11 +54,11 @@ class MayaCallbacks(Callbacks):
                 print(e)
 
     @staticmethod
-    def initCallbacks():
+    def init_callbacks():
         global REFERENCE_CALLBACK
         global SAVE_CALLBACK
 
-        MayaCallbacks.cleanupCallbacks()
+        MayaCallbacks.cleanup_callbacks()
 
         REFERENCE_CALLBACK = api.MSceneMessage.addCheckFileCallback(
             api.MSceneMessage.kBeforeCreateReferenceCheck,

@@ -1,14 +1,13 @@
-
 class Callbacks(object):
 
     @staticmethod
-    def validateSubmit():
+    def validate_submit():
         raise NotImplementedError
 
     @staticmethod
-    def cleanupCallbacks():
+    def cleanup_callbacks():
         raise NotImplementedError
 
     @staticmethod
-    def initCallbacks():
+    def init_callbacks():
         raise NotImplementedError
