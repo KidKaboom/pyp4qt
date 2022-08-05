@@ -4,10 +4,12 @@
 # Python Modules
 import os
 from P4 import P4, P4Exception
+from PySide2.QtCore import QObject
 
 class DictStruct:
     """ Struct that can be constructed to and from a dictionary.
     """
+
     @classmethod
     def from_dict(cls, data):
         """ Constructs an object from a dictionary.
@@ -18,6 +20,9 @@ class DictStruct:
         Returns:
             DictStruct
         """
+        if not isinstance(data, dict):
+            raise RuntimeError("Must provide a dictionary.")
+
         obj = cls()
 
         for key in data.keys():
@@ -68,14 +73,28 @@ class ChangeList(DictStruct):
         self.status = None
         self.changeType = None
         self.desc = None
+        self.depotFile = list()
+        self.action = list()
+        self.type = list()
+        self.rev = list()
 
 
 class Session(P4):
     """ Subclass of a P4 Session with convenience methods.
     """
 
-    def __init__(self, *args, **kwargs):
-        P4.__init__(self, *args, **kwargs)
+    def __del__(self):
+        if self.connected():
+            self.disconnect()
+
+    def __enter__(self):
+        self.connect()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.connected():
+            self.disconnect()
+        return
 
     def info(self):
         """ Returns a dictionary of information from the current P4 session.
@@ -215,7 +234,6 @@ class Session(P4):
 
         for item in query:
             if item.get("user") == info.get("userName") and item.get("client") == info.get("clientName"):
-
                 changelist = ChangeList.from_dict(item)
                 result.append(changelist)
 
@@ -333,6 +351,23 @@ class Session(P4):
         """
         raise NotImplemented
 
+    def get_changelist(self, changelist):
+        """ Returns a Changelist object from a change list id.
+
+        Args:
+            changelist (int)
+
+        Returns:
+            ChangeList
+        """
+        result = list()
+
+        if not self.connected():
+            return result
+
+        result = self.run("describe", changelist)[0]
+        return ChangeList.from_dict(result)
+
 
 if __name__ == "__main__":
     _test = Session()
@@ -348,4 +383,7 @@ if __name__ == "__main__":
     # print(_test.pending_changelists()[0].desc)
     # print(_test.create_changelist("Test4"))
     # _test.edit_changelist(12118125, "Test3")
-    _test.disconnect()
+    # print(_test.get_changelist(12118125).depotFile)
+    # for x in _test.pending_changelists():
+    #     print(x.change)
+    # _test.disconnect()
