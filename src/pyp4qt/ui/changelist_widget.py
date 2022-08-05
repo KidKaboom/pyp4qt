@@ -5,7 +5,7 @@ from pyp4qt.ui.changelist_model import ChangeListModel
 # Python Modules
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QWidget, QSplitter, QTextEdit, QTableWidget, QTableWidgetItem, QVBoxLayout, QLabel, \
-    QAbstractItemView, QDialog, QDialogButtonBox, QPushButton
+    QAbstractItemView, QDialog, QDialogButtonBox
 
 
 class ChangeListWidget(QWidget):

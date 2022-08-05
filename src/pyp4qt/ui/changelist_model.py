@@ -8,9 +8,10 @@ from PySide2.QtCore import QAbstractItemModel, QModelIndex, Qt
 
 class ChangeListItem(object):
     TYPE_NONE = 0
-    TYPE_ROOT = 1
-    TYPE_CHANGELIST = 2
-    TYPE_FILE = 3
+    TYPE_DEFAULT = 1
+    TYPE_ROOT = 2
+    TYPE_CHANGELIST = 3
+    TYPE_FILE = 4
 
     def __init__(self, parent=None, _type=0, path=str(), description=str()):
         self._parent = parent
@@ -66,9 +67,13 @@ class ChangeListItem(object):
         if self._type == ChangeListItem.TYPE_ROOT:
             return len(session.pending_changelists()) > 0
 
+        elif self._type == ChangeListItem.TYPE_DEFAULT:
+            return len(session.get_default_files()) > 0
+
         elif self._type == ChangeListItem.TYPE_CHANGELIST and self._path:
-            data = session.get_changelist(int(self._path))
-            return len(data.depotFile) > 0
+            if self._path and self._path.isdigit():
+                data = session.get_changelist(int(self._path))
+                return len(data.depotFile) > 0
 
         return False
 
@@ -102,15 +107,24 @@ class ChangeListItem(object):
         # Update Root
         if self._type == ChangeListItem.TYPE_ROOT:
 
-            # Get Change lists
+            # Get default changelist
+            default_item = ChangeListItem(self, ChangeListItem.TYPE_DEFAULT, "default")
+            self._children.append(default_item)
+
+            # Get other changelists
             for item in session.pending_changelists():
                 changelist_item = ChangeListItem(self, ChangeListItem.TYPE_CHANGELIST, item.change, item.desc.strip())
 
                 self._children.append(changelist_item)
 
+        # Update Default
+        elif self._type == ChangeListItem.TYPE_DEFAULT:
+            for file in session.get_default_files():
+                file_item = ChangeListItem(self, ChangeListItem.TYPE_FILE, file.depotFile)
+                self._children.append(file_item)
+
         # Update Changelist
         elif self._type == ChangeListItem.TYPE_CHANGELIST:
-
             info = session.get_changelist(self._path)
 
             for file in info.depotFile:
