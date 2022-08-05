@@ -6,6 +6,7 @@ import os
 from P4 import P4, P4Exception
 from PySide2.QtCore import QObject
 
+
 class DictStruct:
     """ Struct that can be constructed to and from a dictionary.
     """
@@ -59,6 +60,10 @@ class DepotFile(DictStruct):
         self.action = None
         self.type = None
         self.time = None
+        self.haveRev = None
+        self.client = None
+        self.user = None
+        self.clientFile = None
 
 
 class ChangeList(DictStruct):
@@ -355,7 +360,7 @@ class Session(P4):
         """ Returns a Changelist object from a change list id.
 
         Args:
-            changelist (int)
+            changelist (str, int)
 
         Returns:
             ChangeList
@@ -367,6 +372,23 @@ class Session(P4):
 
         result = self.run("describe", changelist)[0]
         return ChangeList.from_dict(result)
+
+    def get_default_files(self):
+        """ Returns a list of DepotFiles with the "default" change list.
+
+        Returns:
+            list[DepotFile]
+        """
+        result = list()
+
+        if not self.connected():
+            return result
+
+        for item in self.run("opened"):
+            file = DepotFile.from_dict(item)
+            result.append(file)
+
+        return result
 
 
 if __name__ == "__main__":
@@ -386,4 +408,5 @@ if __name__ == "__main__":
     # print(_test.get_changelist(12118125).depotFile)
     # for x in _test.pending_changelists():
     #     print(x.change)
-    # _test.disconnect()
+    print(_test.get_default_files())
+    _test.disconnect()
