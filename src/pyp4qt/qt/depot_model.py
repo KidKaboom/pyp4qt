@@ -262,9 +262,6 @@ class DepotModel(QAbstractItemModel):
         else:
             item = parent.internalPointer()
 
-        # FIXME: This is a hack to wake up the session. Can't expand an item without this. Not sure why this works.
-        pyp4qt.utils.connect()
-
         return item.hasChildren()
 
 

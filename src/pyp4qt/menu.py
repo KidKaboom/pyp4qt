@@ -1,5 +1,6 @@
 # Project Modules
 from pyp4qt import globals
+from pyp4qt.session import DictStruct
 
 # Python Modules
 import os
@@ -8,7 +9,7 @@ import json
 from configparser import ConfigParser
 
 
-class MenuItem:
+class MenuItem(DictStruct):
     """ Struct that stores menu item information within a hierarchy.
 
     Attributes:
@@ -22,25 +23,6 @@ class MenuItem:
     TYPE_ITEM = 2
     TYPE_DIVIDER = 3
     TYPE_SUBMENU = 4
-
-    @classmethod
-    def from_dict(cls, data):
-        """ Returns a menu item from a dictionary.
-
-        Args:
-            data (dict)
-
-        Returns:
-            MenuItem
-        """
-        obj = cls()
-
-        # Update Object
-        for key in data.keys():
-            if hasattr(obj, key):
-                setattr(obj, key, data[key])
-
-        return obj
 
     @classmethod
     def from_str(cls, string):

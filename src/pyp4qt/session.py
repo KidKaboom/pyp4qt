@@ -136,7 +136,7 @@ class Session(P4):
         Returns:
             str
         """
-        return self.info().get("client_root", str())
+        return self.info().get("clientRoot", str())
 
     def depot_dirs(self, root=str()):
         """ Returns a list of DepotDirectory subdirectories from a root path.
@@ -382,6 +382,27 @@ class Session(P4):
         for item in self.run("opened"):
             file = DepotFile.from_dict(item)
             result.append(file)
+
+        return result
+
+    def workspaces(self):
+        """ Returns a list of workspace strings.
+
+        Returns:
+            list[str]
+        """
+        result = list()
+
+        if not self.connected():
+            return result
+
+        data = self.run("clients", "-u", self.user_name())
+
+        for item in data:
+            workspace = item.get("client")
+
+            if workspace:
+                result.append(workspace)
 
         return result
 

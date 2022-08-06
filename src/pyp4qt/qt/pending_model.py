@@ -133,12 +133,15 @@ class ChangeListItem(object):
         return
 
 
-class ChangeListModel(QAbstractItemModel):
-    def __init__(self, parent=None):
+class PendingModel(QAbstractItemModel):
+    def __init__(self, parent=None, session=None):
         QAbstractItemModel.__init__(self, parent)
 
         self._session = session
         self._root = ChangeListItem(_type=ChangeListItem.TYPE_ROOT)
+
+        if self._session:
+            self._populate()
 
     def isValid(self):
         """ Returns if the current session is valid and is connected.
@@ -292,7 +295,7 @@ if __name__ == "__main__":
     with Session() as session:
         app = QtWidgets.QApplication()
         view = QtWidgets.QTreeView()
-        model = ChangeListModel(view)
+        model = PendingModel(view)
         model.setSession(session)
         view.setModel(model)
         view.show()
