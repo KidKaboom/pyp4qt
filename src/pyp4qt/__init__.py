@@ -28,3 +28,6 @@
 #     p4.disconnect()
 #
 #     qt.cleanup_menu()
+
+
+from pyp4qt.session import Session
