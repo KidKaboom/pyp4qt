@@ -1,5 +1,9 @@
+# Python Modules
 import os
 from P4 import P4, P4Exception
+
+# Qt Modules
+from PySide2.QtCore import QObject, Signal, QThread
 
 
 class DictStruct:
@@ -34,6 +38,33 @@ class DictStruct:
             dict
         """
         return vars(self)
+
+    def __getitem__(self, item):
+        if hasattr(self, item):
+            return getattr(self, item)
+        return
+
+    def __setitem__(self, key, value):
+        if hasattr(self, key):
+            setattr(self, key, value)
+        return
+
+    def __contains__(self, item):
+        return hasattr(self, item)
+
+    def __str__(self):
+        result = "<" + self.__class__.__name__ + ": "
+        result += str(vars(self))
+        result += ">"
+        return result
+
+    def __repr__(self):
+        return self.__str__()
+
+    def get(self, key, default_value=None):
+        if hasattr(self, key):
+            return getattr(self, key)
+        return default_value
 
 
 class DepotDirectory(DictStruct):
@@ -138,11 +169,47 @@ class Session(P4):
         """
         return self.info().get("clientRoot", str())
 
-    def depot_dirs(self, root=str()):
+    def last_user(self, path):
+        """ Returns the name of the last user from a depot file path.
+
+        Args:
+            path (str)
+
+        Returns:
+            str
+        """
+
+        log = self.run("filelog", path)[0]
+        users = log.get("user")
+
+        if users:
+            return users[0]
+
+        return str()
+
+    def has_user(self, path, user):
+        """ Returns True if a user made modifications on depot file.
+
+        Args:
+            path (str)
+            user (str)
+
+        Returns:
+            bool
+        """
+        log = self.run("filelog", path)[0]
+
+        if user in log.get("user", list()):
+            return True
+
+        return False
+
+    def depot_dirs(self, path=str(), recursive=False):
         """ Returns a list of DepotDirectory subdirectories from a root path.
 
         Args:
-            root (str)
+            path (str)
+            recursive (bool)
 
         Returns:
             list[DepotDirectory]
@@ -153,18 +220,18 @@ class Session(P4):
             return result
 
         # Fix Path for querying
-        if not root:
-            root = "//*"
+        if not path:
+            path = "//*"
         else:
-            if root.endswith("/"):
-                root += "*"
-            elif root.endswith("*"):
+            if path.endswith("/"):
+                path += "*"
+            elif path.endswith("*"):
                 pass
             else:
-                root += "/*"
+                path += "/*"
 
         # Get dirs
-        query = self.run("dirs", root)
+        query = self.run("dirs", path)
 
         for item in query:
             obj = DepotDirectory.from_dict(item)
@@ -172,11 +239,14 @@ class Session(P4):
 
         return result
 
-    def depot_files(self, root):
+    def depot_files(self, path, recursive=False, extension_filter=None, user_filter=None):
         """ Returns a list of DepotFile files from a root path.
 
         Args:
-            root (str)
+            path (str)
+            recursive (bool)
+            extension_filter (list)
+            user_filter (str)
 
         Returns:
             list[DepotFile]
@@ -186,20 +256,62 @@ class Session(P4):
         if not self.connected():
             return result
 
+        # Fix filter
+        if isinstance(extension_filter, list):
+            for i in range(len(extension_filter)):
+                string = extension_filter[i]
+
+                if isinstance(string, str) and not string.startswith("."):
+                    extension_filter[i] = ".{}".format(string)
+
         # Fix Path for querying
-        if root.endswith("/"):
-            root += "*"
-        elif root.endswith("*"):
-            pass
+        if recursive:
+            if path.endswith("/"):
+                path += "..."
+            elif path.endswith("/..."):
+                pass
+            else:
+                path += "/..."
         else:
-            root += "/*"
+            if path.endswith("/"):
+                path += "*"
+            elif path.endswith("/*"):
+                pass
+            else:
+                path += "/*"
 
         # Get files
-        query = self.run("files", root)
+        if extension_filter and isinstance(extension_filter, list):
+            for f in extension_filter:
 
-        for item in query:
-            obj = DepotFile.from_dict(item)
-            result.append(obj)
+                try:
+                    query = self.run("files", "-e", path + f)
+                except P4Exception:
+                    return result
+
+                if user_filter:
+                    for item in query:
+                        obj = DepotFile.from_dict(item)
+
+                        if self.last_user(obj.depotFile) in user_filter:
+                              result.append(DepotFile.from_dict(item))
+
+                else:
+                    result += [DepotFile.from_dict(item) for item in query]
+        else:
+            try:
+                query = self.run("files", "-e", path)
+            except:
+                return result
+
+            if user_filter:
+                for item in query:
+                    obj = DepotFile.from_dict(item)
+
+                    if self.last_user(obj.depotFile) in user_filter:
+                        result.append(DepotFile.from_dict(item))
+            else:
+                result = [DepotFile.from_dict(item) for item in query]
 
         return result
 
@@ -406,9 +518,210 @@ class Session(P4):
 
         return result
 
+    def file_info(self, path):
+        """ Returns a dictionary of metadata from a depot file path.
+
+        Args:
+            path (str)
+
+        Returns:
+            dict
+        """
+        data = dict()
+
+        if not self.connected():
+            return data
+
+        data = self.run("fstat", path)[0]
+
+        return data
+
+    def file_log(self, path):
+        """ Returns a dictionary of file log metadata from a depot file path.
+
+        Args:
+            path (str)
+
+        Returns:
+            dict
+        """
+        data = dict()
+
+        if not self.connected():
+            return data
+
+        try:
+            data = _test.run("filelog", path)[0]
+        except:
+            pass
+
+        return data
+
+    def is_valid_dir(self, path):
+        """ Returns True if the directory is within the client's root.
+
+        Args:
+            path (str)
+
+        Returns:
+            bool
+        """
+        # Fix Path
+        if path.endswith("/..."):
+            pass
+        elif path.endswith("/"):
+            path += "..."
+        elif path.endswith("..."):
+            pass
+        else:
+            path += "/..."
+
+        result = False
+
+        try:
+            result = True if self.run("where", path) else False
+
+        except:
+            pass
+
+        return result
+
+
+class SessionCollectionWorker(QObject):
+    """ Class that handles collection of directories, files, or changelists within a QThread.
+
+    Examples:
+        def slot(item):
+            print(item.to_dict())
+
+        thread = QThread()
+        worker = SessionCollectionWorker(
+                session=session,
+                type=SessionCollectWorker.TYPE_FILE,
+                path=path,
+                recursive=True
+                )
+
+        worker.moveToThread(thread)
+        worker.connectToThread(thread)
+        worker.resultReady.connect(slot)
+        thread.start()
+    """
+
+    TYPE_NONE = 0
+    TYPE_DIR = 1
+    TYPE_FILE = 2
+    TYPE_DIR_FILE = 3
+    TYPE_CHANGELIST = 4
+
+    resultReady = Signal(DictStruct)
+    workFinished = Signal()
+    workFailed = Signal()
+
+    progressTotalChanged = Signal(int)
+    progressChanged = Signal(int)
+
+    statusChanged = Signal(str)
+
+    def __init__(self,
+                 session,
+                 type=0,
+                 path=None,
+                 recursive=False,
+                 extension_filter=None,
+                 user_filter=None
+                 ):
+
+        QObject.__init__(self)
+
+        self._session = session
+        self._type = type
+        self._path = path
+        self._recursive = recursive
+        self._extension_filter = extension_filter
+        self._user_filer = user_filter
+
+        if extension_filter is None:
+            self._extension_filter = list()
+
+        if user_filter is None:
+            self._user_filer = list()
+
+    def connectToThread(self, targetThread):
+        """ Convenience method of connecting this worker's signals and slots to a QThread it will be moved to.
+
+        Args:
+            targetThread (QThread)
+
+        Returns:
+            None
+        """
+        targetThread.started.connect(self.doWork)
+        targetThread.finished.connect(self.deleteLater)
+
+        self.workFinished.connect(targetThread.quit)
+        self.workFailed.connect(targetThread.quit)
+        return
+
+    def doWork(self):
+        """ Expensive operation that's handled within the QThread.
+
+        Returns:
+            None
+        """
+        # if not self._session:
+        #     self.work_failed.emit()
+        #     self.work_finished.emit()
+        #     return
+
+        if not self._session.connected():
+            self.statusChanged.emit("Session is not connected.")
+            self.workFailed.emit()
+            return
+
+        if self._type == self.TYPE_NONE:
+            self.statusChanged.emit("Type is None.")
+            self.workFailed.emit()
+            return
+
+        if self._type != self.TYPE_CHANGELIST and not self._path:
+            self.statusChanged.emit("Does not have a path set.")
+            self.workFailed.emit()
+            return
+
+        total = 0
+        result = list()
+
+        if self._type in [self.TYPE_DIR, self.TYPE_DIR_FILE]:
+            self.statusChanged.emit("Retrieving directories from depot: " + self._path)
+            dirs = self._session.depot_dirs(path=self._path, recursive=self._recursive)
+            result += dirs
+            total += len(dirs) - 1
+
+        if self._type in [self.TYPE_FILE, self.TYPE_DIR_FILE]:
+            self.statusChanged.emit("Retrieving files from depot: " + self._path)
+            files = self._session.depot_files(path=self._path, recursive=self._recursive, extension_filter=self._extension_filter)
+            result += files
+            total += len(files) - 1
+
+        if self._type == self.TYPE_CHANGELIST:
+            self.statusChanged.emit("Retrieving pending changelists.")
+            changelist = self._session.pending_changelists()
+            result = changelist
+            total = len(changelist) - 1
+
+        self.progressTotalChanged.emit(total)
+
+        for i in range(total):
+            self.resultReady.emit(result[i])
+            self.progressChanged.emit(i)
+
+        self._session.disconnect()
+        self.workFinished.emit()
+        return
+
 
 if __name__ == "__main__":
     _test = Session()
     _test.connect()
-    print(_test.get_default_files())
     _test.disconnect()

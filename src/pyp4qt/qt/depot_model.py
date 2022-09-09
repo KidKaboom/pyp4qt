@@ -9,14 +9,14 @@ from PySide2.QtCore import QAbstractItemModel, QModelIndex, Qt
 
 class DepotItem(object):
     TYPE_NONE = 0
-    TYPE_DIR = 2
-    TYPE_FILE = 1
+    TYPE_DIR = 1
+    TYPE_FILE = 2
 
-    def __init__(self, session=None, parent=None, _type=0, path=str()):
+    def __init__(self, session=None, parent=None, type=0, path=str()):
         self._session = session
         self._parent = parent
         self._path = path
-        self._type = _type
+        self._type = type
         self._children = list()
         self._is_loaded = False
 
@@ -26,19 +26,45 @@ class DepotItem(object):
     def session(self):
         return self._session
 
+    def set_session(self, session):
+        self._session = session
+        return
+
     def parent(self):
         return self._parent
+
+    def set_parent(self, parent):
+        self._parent = parent
+        return
 
     def path(self):
         return self._path
 
+    def set_path(self, path):
+        self._path = path
+        return
+
     def data(self, index):
+        """ Returns data by column index.
+
+        Args:
+            index (int)
+
+        Returns:
+            str
+        """
         if index == 0:
-            path_split = self._path.split("/")
-            return path_split[-1]
+            if self._path:
+                path_split = self._path.split("/")
+                return path_split[-1]
         return
 
     def load(self):
+        """ Loads the children from the depot into memory.
+
+        Returns:
+            None
+        """
         self._children = list()
 
         if not self._session or not self._path:
@@ -80,7 +106,28 @@ class DepotItem(object):
     def children(self):
         return self._children
 
-    def _sessionChildCount(self):
+    def append_child(self, child):
+        """ Append a child object.
+
+        Args:
+            child (DepotItem)
+
+        Returns:
+            None
+        """
+        if not isinstance(child, DepotItem):
+            raise RuntimeError("Invalid child type.")
+
+        child.set_parent(self)
+        self._children.append(child)
+        return
+
+    def sessionChildCount(self):
+        """ Returns the child count of children within the depot.
+
+        Returns:
+            int
+        """
         if self._type != DepotItem.TYPE_DIR or not self._path or not self._session:
             return 0
 
@@ -103,7 +150,7 @@ class DepotItem(object):
         if self._is_loaded:
             return len(self._children)
 
-        return self._sessionChildCount()
+        return self.sessionChildCount()
 
     def row(self):
         if self._parent:

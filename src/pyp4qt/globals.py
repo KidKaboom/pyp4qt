@@ -13,3 +13,7 @@ ICONS_DIR = os.path.join(SRC_DIR, "icons")
 CONFIG_DIR = os.path.join(SRC_DIR, "config")
 MENU_CONFIG_FILE = os.path.join(CONFIG_DIR, "menu_config.ini")
 DCC = "standalone"
+
+CURRENT_COMMENT = "PYP4QT_COMMENT"
+CURRENT_DCC = "PYP4QT_DCC"
+

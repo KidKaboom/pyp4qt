@@ -1,6 +1,8 @@
 import pyp4qt
 import pyp4qt.qt
 
+from PySide2.QtWidgets import QDialog
+
 import sys
 import maya.mel as mel
 import maya.cmds as cmds
@@ -14,6 +16,7 @@ kMenuName = "PerforceMenu"
 kPerforceWindowName = "PerforceWindow"
 kChangelistWindowName = "PerforceChangelistWindow"
 kDepotWindowName = "PerforceDepotWindow"
+kCheckoutWindowName = "PerforceCheckoutWindow"
 
 #FIXME: This is for demo / need to properly rework it.
 class MayaP4Command(OpenMayaMPx.MPxCommand):
@@ -50,6 +53,7 @@ class MayaP4Command(OpenMayaMPx.MPxCommand):
 
             menu = cmds.menu(kMenuName, parent=window, tearOff=True, label='Perforce')
             cmds.menuItem(label="Perforce Window", command=MayaP4Command.show_perforce)
+            cmds.menuItem(label="Checkout / Open", command=MayaP4Command.show_checkout)
             cmds.menuItem(label="Depot / Workspace Window", command=MayaP4Command.show_depot)
             cmds.menuItem(divider=True)
             cmds.menuItem(label="New Changelist", command=MayaP4Command.show_changelist)
@@ -66,7 +70,7 @@ class MayaP4Command(OpenMayaMPx.MPxCommand):
         except:
             pass
 
-        for window in [kPerforceWindowName, kChangelistWindowName, kDepotWindowName]:
+        for window in [kPerforceWindowName, kChangelistWindowName, kDepotWindowName, kCheckoutWindowName]:
             try:
                 cmds.deleteUI(window)
             except:
@@ -129,6 +133,32 @@ class MayaP4Command(OpenMayaMPx.MPxCommand):
         window.setWindowTitle("New Changelist")
         window.show()
         return
+
+    @staticmethod
+    def show_checkout(*args, **kwargs):
+        try:
+            cmds.deleteUI(kChangelistWindowName)
+        except:
+            pass
+
+        session = pyp4qt.Session()
+
+        if not session.connected():
+            session.connect()
+
+        parent = MayaP4Command.main_parent_window()
+        window = pyp4qt.qt.ConfigDepotDialog(parent, session, "")
+        window.setObjectName(kCheckoutWindowName)
+        window.setWindowTitle("Checkout & Open")
+
+        if window.exec_() == QDialog.Accepted:
+            items = window.items()
+
+            if items:
+                # cmds.file(new=True, force=True)
+                cmds.file(items[0].client_file(), open=True)
+        return
+
 
 
 def cmdCreator():

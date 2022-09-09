@@ -1,6 +1,9 @@
 # Project Modules
+import os
+
 from pyp4qt.session import Session
 from pyp4qt.qt.pending_model import PendingModel
+from pyp4qt import globals
 
 # Python Modules
 from PySide2.QtCore import Qt
@@ -33,6 +36,12 @@ class ChangeListWidget(QWidget):
 
         self._description = QTextEdit()
         self._description.setPlaceholderText("<enter description here>")
+
+        comment = os.environ.get(globals.CURRENT_COMMENT, str())
+
+        if comment:
+            self._description.setText("{}: ".format(comment))
+
         self._description.setFocusPolicy(Qt.ClickFocus)
         desc_widget.layout().addWidget(self._description)
 
@@ -62,7 +71,7 @@ class ChangeListWidget(QWidget):
         Returns:
             str
         """
-        return self._description.text()
+        return self._description.toPlainText()
 
     def files(self):
         """ Returns a list of depot file paths from the table widget.
@@ -135,8 +144,22 @@ class ChangeListDialog(QDialog):
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         layout.addWidget(buttons)
 
-        buttons.accepted.connect(self.accept)
+        buttons.accepted.connect(self._on_accept)
         buttons.rejected.connect(self.reject)
+
+    def _on_accept(self):
+        files = self.widget.files()
+        changelist = int()
+
+        if self._session:
+            changelist = self._session.create_changelist(self.widget.description())
+
+            for file in files:
+                self._session.move_to_changelist(file, changelist)
+
+        self.accept()
+        pass
+
 
 
 if __name__ == "__main__":
@@ -149,4 +172,6 @@ if __name__ == "__main__":
         # widget.populate_files(session)
         if widget.exec_() == QDialog.Accepted:
             print(widget.widget.files())
-        # sys.exit(app.exec_())
+            sys.exit()
+        else:
+            sys.exit()
